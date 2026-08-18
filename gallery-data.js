@@ -146,7 +146,8 @@ window.galleryItems = [
     "preview": "gallery/g14/preview.mp4",
     "media": [
       "gallery/g14/1.mp4",
-      "gallery/g14/2.mp4"
+      "gallery/g14/2.mp4",
+      "gallery/g14/11.mp4"
     ],
     "hidePreview": false
   },
