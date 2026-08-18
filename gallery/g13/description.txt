@@ -1,0 +1,7 @@
+#game
+
+2D runner with platforming. Defeat and tame monsters, find new locations
+2D runner with platforming. Defeat and tame monsters, find new locations
+
+Previous version of game was lost, all media that exist of it is here. 
+In case i find a way to restore data, i'll publish updated versions.

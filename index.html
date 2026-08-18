@@ -1,203 +1,145 @@
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow"> 
-  <title>Alice Dvachevskaya</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
-  <style>
-    /* Основной стиль страницы */
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #000, #111);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    /* Контейнер содержимого */
-    .container {
-      text-align: center;
-      max-width: 480px;
-      width: 90%;
-      padding: 24px 24px;
-      box-sizing: border-box;
-      transform: scale(1);
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      animation: fadeIn 1.2s ease;
-      margin: 24px 0;
-    }
-
-    /* Стиль для аватара */
-    .avatar {
-      width: 144px;
-      height: 144px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin: 0 auto 18px;
-      border: 3px solid #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .avatar img {
-      width: 100%;
-      height: auto;
-    }
-
-    /* Имя пользователя и должность */
-    .username {
-      font-size: 31.2px;
-      font-weight: 600;
-      margin: 12px 0 6px;
-    }
-
-    .title {
-      font-size: 16.8px;
-      color: #bbb;
-      margin-bottom: 24px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Текстовый блок */
-    .text {
-      font-size: 16.8px;
-      color: #ddd;
-      margin-bottom: 24px;
-    }
-
-    /* Стиль ссылок */
-    .link {
-      display: flex; /* Используйте flex для выравнивания иконки и текста */
-      align-items: center; /* Центрируем элементы по вертикали */
-      padding: 18px;
-      margin: 12px 0;
-      color: #fff;
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 19.2px;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Эффекты при наведении */
-    .link:hover {
-      background-color: #333;
-      transform: translateY(-5px);
-    }
-
-    /* Иконка для кнопок */
-    .link img {
-      width: 24px; /* Размер иконки */
-      height: 24px; /* Размер иконки */
-      margin-right: 10px; /* Промежуток между иконкой и текстом */
-    }
-
-    /* Анимация для контейнера */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    /* Контейнер для изображений проектов */
-    .projects {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      margin-top: 36px;
-    }
-
-    /* Стиль для каждого изображения проекта */
-    .project {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      border-radius: 10px;
-      transition: transform 0.3s ease;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .project img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .project:hover {
-      transform: scale(1.05);
-    }
-
-    .project-link {
-      position: absolute;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      color: #fff;
-      font-weight: 600;
-      font-size: 21.6px;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: opacity 0.3s ease;
-    }
-
-    .project:hover .project-link {
-      opacity: 1;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Personal gallery of Miracle Dev">
+<title>Miracle Dev's Archive</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<main class="page">
 
-  <div class="container">
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+  <div class="identity">
     <div class="avatar">
-      <img src="icon.png" alt="Avatar">
+      <img src="icon.png" alt="Miracle Dev">
     </div>
-    <div class="username">Alice Dvachevskaya</div>
-    <div class="title">Game Developer</div>
-    <div class="text">Contact me, let's write games together =)</div>
-    <a href="https://x.com/_miracula" class="link">
-      <img src="twitter.png" alt="Twitter Icon"> Twitter
-    </a>
-    <a href="https://t.me/tinyfe" class="link">
-      <img src="telegram.png" alt="Telegram Icon"> Telegram
-    </a>
-    <div class="text" style="margin-top: 24px; margin-bottom: 24px;">Aaand... here are my personal blogs about gamedev and stuff:</div>
-    <a href="https://discord.gg/SUcQfnxQrA" class="link">
-      <img src="discord.png" alt="Discord Icon"> Discord blog
-    </a>
-    <a href="https://icx.itch.io" class="link">
-      <img src="itch-io.svg" alt="Itch.io Icon"> Itch.io page
-    </a>
-    <a href="https://t.me/miracula_dev" class="link">
-      <img src="telegram.png" alt="Telegram Channel Icon"> Telegram channel
-    </a>
-    <div class="text" style="margin-top: 36px; margin-bottom: 0px;">My projects:</div>
-    <!-- Галерея проектов -->
-    <div class="projects" id="projects">
-      <div class="project">
-        <a href="https://icx.itch.io/decide-their-fate" class="project-link">Decide Their Fate!</a>
-        <img src="sN6eEA.png" alt="Project 1">
-      </div>
-      <div class="project">
-        <a href="https://icx.itch.io/jira" class="project-link">Jira</a>
-        <img src="DXZePD.png" alt="Project 2">
-      </div>
-      <div class="project">
-        <a href="https://icx.itch.io/melancholy-fight" class="project-link">Melancholy Story</a>
-        <img src="fOwjmw.png" alt="Project 3">
-      </div>
+
+    <div class="name">
+      Miracle Dev's Archive
     </div>
   </div>
 
+  <nav class="contacts" aria-label="Contacts">
+    <a href="https://x.com/_miracula">X</a>
+    <a href="https://t.me/tinyfe">Telegram</a>
+    <a href="https://icx.itch.io">Itch.io</a>
+    <button class="contact-button" type="button" id="contact-open" aria-haspopup="dialog">
+      Contact Me
+    </button>
+  </nav>
+
+</header>
+
+
+<!-- =========================
+     INTRO
+========================= -->
+
+<section class="intro">
+
+  <div class="about">
+    <p>Hello! I love gamedev and art. Worked for 2 years in cybersecurity industry at NeoBIT.ru, pentesting different Unix-like systems and servers.</p>
+  </div>
+
+</section>
+
+
+<!-- =========================
+     WORKS
+========================= -->
+
+<section>
+
+  <div class="section-label">
+    <span>Works</span>
+    <span>2026</span>
+  </div>
+
+
+  <!-- FILTERS -->
+
+  <div class="filters" aria-label="Filter works">
+
+    <button
+      class="filter active"
+      type="button"
+      data-filter="all">
+      All
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       GALLERY
+  ========================= -->
+
+  <div class="works" id="works"></div>
+
+</section>
+
+
+<!-- =========================
+     CONTACT MODAL
+========================= -->
+
+<div class="contact-modal" id="contact-modal" aria-hidden="true">
+  <div class="contact-backdrop" data-contact-close></div>
+
+  <section class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+    <div class="contact-dialog-header">
+      <div>
+        <div class="contact-kicker">Get in touch</div>
+        <h2 id="contact-title">Contact Me</h2>
+      </div>
+
+      <button class="contact-close" type="button" data-contact-close aria-label="Close contact window">×</button>
+    </div>
+
+    <div class="contact-list">
+      <a href="https://x.com/_miracula" target="_blank" rel="noopener noreferrer">
+        <span>X / Twitter</span><span>@_miracula ↗</span>
+      </a>
+      <a href="https://t.me/tinyfe" target="_blank" rel="noopener noreferrer">
+        <span>Telegram</span><span>@tinyfe ↗</span>
+      </a>
+      <a href="https://discord.gg/SUcQfnxQrA" target="_blank" rel="noopener noreferrer">
+        <span>Discord blog</span><span>Open ↗</span>
+      </a>
+      <a href="https://t.me/miracula_dev" target="_blank" rel="noopener noreferrer">
+        <span>Telegram channel</span><span>@miracula_dev ↗</span>
+      </a>
+    </div>
+  </section>
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+  <span>
+    © 2026 Alice Dvachevskaya
+  </span>
+
+  <span>
+    Works / Archive
+  </span>
+
+</footer>
+
+</main>
+<script src="gallery-data.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

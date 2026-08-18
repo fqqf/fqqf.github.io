@@ -1,0 +1,1210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Alice Dvachevskaya — games, photography, GIFs, experiments and other things.">
+<title>Alice Dvachevskaya — Works</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0b0b0b;
+  --text:#f2f2f2;
+  --muted:#858585;
+  --line:#242424;
+  --page-width:1500px;
+  --gap:18px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  background:var(--bg);
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  padding:22px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Montserrat",sans-serif;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+}
+
+.page{
+  width:100%;
+  max-width:var(--page-width);
+  margin:0 auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--line);
+}
+
+.identity{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.avatar{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  overflow:hidden;
+  flex:0 0 auto;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.name{
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:-.02em;
+}
+
+.contacts{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.contacts a{
+  color:var(--text);
+  transition:color 180ms ease;
+}
+
+.contacts a:hover{
+  color:var(--muted);
+}
+
+/* =========================
+   INTRO
+========================= */
+
+.intro{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:var(--gap);
+  padding:42px 0 58px;
+}
+
+.role{
+  max-width:720px;
+  font-size:clamp(22px,3vw,42px);
+  font-weight:300;
+  line-height:1.08;
+  letter-spacing:-.045em;
+}
+
+.role strong{
+  font-weight:600;
+}
+
+.about{
+  justify-self:end;
+  max-width:440px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+}
+
+.about p{
+  margin:0 0 22px;
+}
+
+.about p:last-child{
+  margin-bottom:0;
+}
+
+.socials{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  margin-top:28px;
+}
+
+.socials a{
+  color:var(--text);
+  border-bottom:1px solid var(--line);
+  padding-bottom:3px;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.socials a:hover{
+  color:var(--muted);
+  border-color:var(--muted);
+}
+
+/* =========================
+   SECTION HEADER
+========================= */
+
+.section-label{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding-bottom:10px;
+  margin-bottom:14px;
+  border-bottom:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:28px;
+}
+
+.filter{
+  appearance:none;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--muted);
+  padding:6px 11px;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:11px;
+  line-height:1;
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.filter:hover{
+  color:var(--text);
+  border-color:#444;
+}
+
+.filter.active{
+  background:var(--text);
+  color:var(--bg);
+  border-color:var(--text);
+}
+
+/* =========================
+   WORKS GRID
+========================= */
+
+.works{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:42px var(--gap);
+}
+
+.work{
+  margin:0;
+  min-width:0;
+}
+
+.work.is-hidden{
+  display:none;
+}
+
+/* =========================
+   MEDIA
+========================= */
+
+.media{
+  position:relative;
+  width:100%;
+  aspect-ratio:3/2;
+  background:#151515;
+  overflow:hidden;
+}
+
+.media img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  opacity:0;
+  transform:scale(1);
+  transition:
+    opacity 550ms ease,
+    transform 500ms cubic-bezier(.2,.7,.2,1);
+  pointer-events:none;
+}
+
+.media img.is-active{
+  opacity:1;
+}
+
+.work:hover .media img.is-active{
+  transform:scale(1.025);
+}
+
+/* =========================
+   CAPTION
+========================= */
+
+.caption{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+  padding-top:10px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.title{
+  color:var(--text);
+  font-weight:500;
+}
+
+.description{
+  color:var(--muted);
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:7px;
+}
+
+.tag{
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:3px 7px;
+  font-size:9px;
+  line-height:1;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+.project-link{
+  display:inline-block;
+  margin-top:5px;
+  color:var(--muted);
+  border-bottom:1px solid transparent;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.project-link:hover{
+  color:var(--text);
+  border-color:var(--text);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  margin-top:72px;
+  padding:16px 0 4px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1000px){
+
+  .works{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+}
+
+@media(max-width:760px){
+
+  body{
+    padding:14px;
+  }
+
+  header{
+    align-items:flex-start;
+    flex-direction:column;
+    padding-bottom:16px;
+  }
+
+  .contacts{
+    gap:10px 16px;
+    flex-wrap:wrap;
+  }
+
+  .intro{
+    grid-template-columns:1fr;
+    padding:30px 0 42px;
+    gap:28px;
+  }
+
+  .role{
+    max-width:520px;
+    font-size:clamp(25px,8vw,38px);
+  }
+
+  .about{
+    justify-self:start;
+    max-width:520px;
+  }
+
+  .socials{
+    margin-top:24px;
+  }
+
+  .works{
+    grid-template-columns:1fr;
+    gap:38px;
+  }
+
+  .caption{
+    grid-template-columns:1fr;
+  }
+
+  footer{
+    margin-top:48px;
+    flex-direction:column;
+    gap:6px;
+  }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  html{
+    scroll-behavior:auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    transition:none!important;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+  <div class="identity">
+    <div class="avatar">
+      <img src="icon.png" alt="Alice Dvachevskaya">
+    </div>
+
+    <div class="name">
+      Alice Dvachevskaya
+    </div>
+  </div>
+
+  <nav class="contacts" aria-label="Contacts">
+    <a href="https://x.com/_miracula">X</a>
+    <a href="https://t.me/tinyfe">Telegram</a>
+    <a href="https://icx.itch.io">Itch.io</a>
+  </nav>
+
+</header>
+
+
+<!-- =========================
+     INTRO
+========================= -->
+
+<section class="intro">
+
+  <div>
+    <div class="role">
+      <strong>Games, images, experiments.</strong><br>
+      And other things I've made.
+    </div>
+  </div>
+
+  <div class="about">
+
+    <p>
+      A collection of games, photographs, GIFs,
+      interactive projects, experiments and other things.
+    </p>
+
+    <p>
+      Everything in one place.
+    </p>
+
+    <div class="socials">
+      <a href="https://x.com/_miracula">X / Twitter</a>
+      <a href="https://t.me/tinyfe">Telegram</a>
+      <a href="https://discord.gg/SUcQfnxQrA">Discord blog</a>
+      <a href="https://t.me/miracula_dev">Telegram channel</a>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     WORKS
+========================= -->
+
+<section>
+
+  <div class="section-label">
+    <span>Works</span>
+    <span>2026</span>
+  </div>
+
+
+  <!-- FILTERS -->
+
+  <div class="filters" aria-label="Filter works">
+
+    <button
+      class="filter active"
+      type="button"
+      data-filter="all">
+      All
+    </button>
+
+    <button
+      class="filter"
+      type="button"
+      data-filter="game">
+      Game
+    </button>
+
+    <button
+      class="filter"
+      type="button"
+      data-filter="photography">
+      Photography
+    </button>
+
+    <button
+      class="filter"
+      type="button"
+      data-filter="gif">
+      GIF
+    </button>
+
+    <button
+      class="filter"
+      type="button"
+      data-filter="art">
+      Art
+    </button>
+
+    <button
+      class="filter"
+      type="button"
+      data-filter="experiment">
+      Experiment
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       GALLERY
+  ========================= -->
+
+  <div class="works">
+
+
+    <!-- WORK 01 -->
+
+    <figure
+      class="work"
+      data-tags="game gif">
+
+      <div class="media">
+
+        <img
+          src="sN6eEA.png"
+          data-images="sN6eEA.png,sN6eEA_1.png,sN6eEA_2.png,sN6eEA_3.png"
+          alt="Decide Their Fate!"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Decide Their Fate!
+          </div>
+
+          <div class="tags">
+            <span class="tag">Game</span>
+            <span class="tag">GIF</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+
+          Interactive game project.
+
+          <br>
+
+          <a
+            class="project-link"
+            href="https://icx.itch.io/decide-their-fate">
+            View project →
+          </a>
+
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 02 -->
+
+    <figure
+      class="work"
+      data-tags="game">
+
+      <div class="media">
+
+        <img
+          src="DXZePD.png"
+          data-images="DXZePD.png,DXZePD_1.png,DXZePD_2.png,DXZePD_3.png"
+          alt="Jira"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Jira
+          </div>
+
+          <div class="tags">
+            <span class="tag">Game</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+
+          Game project.
+
+          <br>
+
+          <a
+            class="project-link"
+            href="https://icx.itch.io/jira">
+            View project →
+          </a>
+
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 03 -->
+
+    <figure
+      class="work"
+      data-tags="game experiment">
+
+      <div class="media">
+
+        <img
+          src="fOwjmw.png"
+          data-images="fOwjmw.png,fOwjmw_1.png,fOwjmw_2.png,fOwjmw_3.png"
+          alt="Melancholy Story"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Melancholy Story
+          </div>
+
+          <div class="tags">
+            <span class="tag">Game</span>
+            <span class="tag">Experiment</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+
+          Interactive story project.
+
+          <br>
+
+          <a
+            class="project-link"
+            href="https://icx.itch.io/melancholy-fight">
+            View project →
+          </a>
+
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 04 -->
+
+    <figure
+      class="work"
+      data-tags="photography">
+
+      <div class="media">
+
+        <img
+          src="images/work-04.jpg"
+          alt="Photography"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Untitled
+          </div>
+
+          <div class="tags">
+            <span class="tag">Photography</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+          Photography.
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 05 -->
+
+    <figure
+      class="work"
+      data-tags="gif experiment">
+
+      <div class="media">
+
+        <img
+          src="images/work-05.gif"
+          alt="GIF experiment"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Small Loop
+          </div>
+
+          <div class="tags">
+            <span class="tag">GIF</span>
+            <span class="tag">Experiment</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+          A small visual experiment.
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 06 -->
+
+    <figure
+      class="work"
+      data-tags="art">
+
+      <div class="media">
+
+        <img
+          src="images/work-06.jpg"
+          alt="Artwork"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Untitled
+          </div>
+
+          <div class="tags">
+            <span class="tag">Art</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+          Digital artwork.
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 07 -->
+
+    <figure
+      class="work"
+      data-tags="game experiment">
+
+      <div class="media">
+
+        <img
+          src="images/work-07.jpg"
+          alt="Game experiment"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Prototype
+          </div>
+
+          <div class="tags">
+            <span class="tag">Game</span>
+            <span class="tag">Experiment</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+          Gameplay experiment.
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+    <!-- WORK 08 -->
+
+    <figure
+      class="work"
+      data-tags="photography art">
+
+      <div class="media">
+
+        <img
+          src="images/work-08.jpg"
+          alt="Photography and art"
+          loading="lazy">
+
+      </div>
+
+      <figcaption class="caption">
+
+        <div>
+
+          <div class="title">
+            Untitled
+          </div>
+
+          <div class="tags">
+            <span class="tag">Photography</span>
+            <span class="tag">Art</span>
+          </div>
+
+        </div>
+
+        <div class="description">
+          Photography / visual study.
+        </div>
+
+      </figcaption>
+
+    </figure>
+
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+  <span>
+    © 2026 Alice Dvachevskaya
+  </span>
+
+  <span>
+    Works / Archive
+  </span>
+
+</footer>
+
+</main>
+
+
+<script>
+
+/* =========================
+   MULTI-TAG FILTER
+========================= */
+
+const filters = document.querySelectorAll('.filter');
+const works = document.querySelectorAll('.work');
+
+const selectedFilters = new Set();
+
+
+function updateWorks(){
+
+  works.forEach(work => {
+
+    const tags = work.dataset.tags
+      .split(' ')
+      .map(tag => tag.trim())
+      .filter(Boolean);
+
+    /*
+      Если ничего не выбрано —
+      показываем всё.
+    */
+
+    if(selectedFilters.size === 0){
+
+      work.classList.remove('is-hidden');
+
+      return;
+    }
+
+    /*
+      Работа показывается, если
+      у неё есть хотя бы один
+      выбранный тег.
+    */
+
+    const matches = [...selectedFilters]
+      .some(filter => tags.includes(filter));
+
+    work.classList.toggle(
+      'is-hidden',
+      !matches
+    );
+
+  });
+
+}
+
+
+filters.forEach(filter => {
+
+  filter.addEventListener('click', () => {
+
+    const value = filter.dataset.filter;
+
+    /*
+      All сбрасывает остальные фильтры.
+    */
+
+    if(value === 'all'){
+
+      selectedFilters.clear();
+
+      filters.forEach(button => {
+        button.classList.remove('active');
+      });
+
+      filter.classList.add('active');
+
+      updateWorks();
+
+      return;
+    }
+
+
+    /*
+      При выборе конкретного тега
+      снимаем All.
+    */
+
+    const allButton =
+      document.querySelector('[data-filter="all"]');
+
+    allButton.classList.remove('active');
+
+
+    /*
+      Toggle:
+      нажала → добавился
+      нажала ещё раз → убрался
+    */
+
+    if(selectedFilters.has(value)){
+
+      selectedFilters.delete(value);
+      filter.classList.remove('active');
+
+    }else{
+
+      selectedFilters.add(value);
+      filter.classList.add('active');
+
+    }
+
+
+    /*
+      Если фильтры полностью сняты —
+      возвращаем All.
+    */
+
+    if(selectedFilters.size === 0){
+
+      allButton.classList.add('active');
+
+    }
+
+    updateWorks();
+
+  });
+
+});
+
+
+/* =========================
+   IMAGE CROSSFADE
+========================= */
+
+document
+  .querySelectorAll('[data-images]')
+  .forEach(originalImg => {
+
+    const images =
+      originalImg.dataset.images
+        .split(',')
+        .map(src => src.trim())
+        .filter(Boolean);
+
+    const media =
+      originalImg.closest('.media');
+
+
+    if(!media || images.length < 2){
+      originalImg.classList.add('is-active');
+      return;
+    }
+
+
+    /*
+      Создаём второй слой
+      для плавного crossfade.
+    */
+
+    const nextImg =
+      originalImg.cloneNode(false);
+
+
+    originalImg.removeAttribute('loading');
+
+    originalImg.classList.add('is-active');
+
+    nextImg.classList.remove('is-active');
+
+    media.appendChild(nextImg);
+
+
+    const layers = [
+      originalImg,
+      nextImg
+    ];
+
+
+    let current = 0;
+    let activeLayer = 0;
+    let timer = null;
+
+
+    const showNext = () => {
+
+      const next =
+        (current + 1) % images.length;
+
+      const nextLayer =
+        activeLayer === 0 ? 1 : 0;
+
+
+      const incoming =
+        layers[nextLayer];
+
+      const outgoing =
+        layers[activeLayer];
+
+
+      incoming.src =
+        images[next];
+
+      incoming.classList.add('is-active');
+
+      outgoing.classList.remove('is-active');
+
+
+      current = next;
+      activeLayer = nextLayer;
+
+    };
+
+
+    const reset = () => {
+
+      clearInterval(timer);
+
+      timer = null;
+
+      current = 0;
+      activeLayer = 0;
+
+
+      layers[0].src =
+        images[0];
+
+      layers[1].src =
+        images[1];
+
+
+      layers[0].classList.add(
+        'is-active'
+      );
+
+      layers[1].classList.remove(
+        'is-active'
+      );
+
+    };
+
+
+    media.addEventListener(
+      'mouseenter',
+      () => {
+
+        if(timer) return;
+
+
+        /*
+          Первая смена сразу
+          после наведения.
+        */
+
+        showNext();
+
+
+        /*
+          Затем каждые 1.2 секунды.
+        */
+
+        timer = setInterval(
+          showNext,
+          1200
+        );
+
+      }
+    );
+
+
+    media.addEventListener(
+      'mouseleave',
+      reset
+    );
+
+  });
+
+</script>
+
+</body>
+</html>

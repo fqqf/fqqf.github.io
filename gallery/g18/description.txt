@@ -1,0 +1,6 @@
+#demo
+
+Demo of rimworld-like game made to test AI for Drumir
+Demo of rimworld-like game made to test AI for Drumir
+
+Closed source.

@@ -1,0 +1,6 @@
+#game
+Decide Their Fate!
+Simple game made in 48 hours for MelonJam 5
+
+Simple made in 48 hours for fun as a submission to MelonJam 5
+Game link: https://icx.itch.io/decide-their-fate
