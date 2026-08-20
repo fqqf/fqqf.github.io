@@ -179,17 +179,6 @@ window.galleryItems = [
     "hidePreview": false
   },
   {
-    "title": "Snowfall runner demo",
-    "tags": [
-      "demo"
-    ],
-    "shortDescription": "Endless runner for mobile platforms on Unreal Engine using C++ and blueprints",
-    "longDescription": "Source: https://github.com/fqqf/snowfall-runner-demo",
-    "preview": "gallery/g17/preview.png",
-    "media": [],
-    "hidePreview": false
-  },
-  {
     "title": "",
     "tags": [
       "demo"
