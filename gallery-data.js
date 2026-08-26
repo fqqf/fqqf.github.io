@@ -7,7 +7,7 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g2/preview.mp4",
+    "preview": "gallery/g2/preview.webm",
     "media": [],
     "hidePreview": false
   },
@@ -18,7 +18,7 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g3/preview.mp4",
+    "preview": "gallery/g3/preview.webm",
     "media": [],
     "hidePreview": false
   },
@@ -29,7 +29,7 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g4/preview.mp4",
+    "preview": "gallery/g4/preview.webm",
     "media": [],
     "hidePreview": false
   },
@@ -62,7 +62,7 @@ window.galleryItems = [
     ],
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
-    "preview": "gallery/g7/preview.mp4",
+    "preview": "gallery/g7/preview.webm",
     "media": [],
     "hidePreview": false
   },
@@ -95,7 +95,7 @@ window.galleryItems = [
     ],
     "shortDescription": "Logo animation for MART in 2017",
     "longDescription": "Logo animation for MART in 2017\nMy first paid vector animation\n\nLooking back i completely dislike how it turned out, i could've done it way better.",
-    "preview": "gallery/g10/preview.mp4",
+    "preview": "gallery/g10/preview.webm",
     "media": [],
     "hidePreview": false
   },
@@ -134,7 +134,7 @@ window.galleryItems = [
       "gallery/g13/3.jpg",
       "gallery/g13/4.jpg"
     ],
-    "hidePreview": true
+    "hidePreview": false
   },
   {
     "title": "Drumir",
@@ -143,9 +143,9 @@ window.galleryItems = [
     ],
     "shortDescription": "World exploration multiplayer game based on DCC by Matt Dinniman",
     "longDescription": "World exploration multiplayer game based on DCC by Matt Dinniman\n\nIn development right now, looking for 2nd artist for this project.\n2026",
-    "preview": "gallery/g14/preview.mp4",
+    "preview": "gallery/g14/preview.webm",
     "media": [
-      "gallery/g14/1.mp4",
+      "gallery/g14/1.webm",
       "gallery/g14/2.mp4"
     ],
     "hidePreview": false
