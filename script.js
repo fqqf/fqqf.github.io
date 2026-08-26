@@ -1,18 +1,43 @@
 const worksContainer = document.getElementById('works');
 const selected = new Set();
 const VIDEO_PATTERN = /\.(mp4|webm|ogg|mov|m4v)$/i;
+const lazyVideos = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    const video = entry.target;
+    if (entry.isIntersecting) {
+      if (!video.hasAttribute('src')) {
+        video.src = video.dataset.src;
+        video.load();
+      }
+      if (video.autoplay) video.play().catch(() => {});
+    } else if (video.hasAttribute('src')) {
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    }
+  });
+}, {
+  rootMargin: '500px 0px',
+  threshold: 0,
+});
 
-function createVisual(source, { alt = '', controls = false, autoplay = false } = {}) {
+function createVisual(source, { alt = '', controls = false, autoplay = false, lazy = !controls } = {}) {
   const visual = document.createElement(VIDEO_PATTERN.test(source) ? 'video' : 'img');
-  visual.src = source;
   if (visual instanceof HTMLVideoElement) {
     visual.controls = controls;
     visual.autoplay = autoplay;
     visual.loop = !controls;
     visual.muted = !controls;
     visual.playsInline = true;
-    visual.preload = 'metadata';
+    visual.preload = lazy ? 'none' : 'metadata';
+    if (lazy) {
+      visual.dataset.src = source;
+      lazyVideos.observe(visual);
+    } else {
+      visual.src = source;
+    }
   } else {
+    visual.src = source;
     visual.alt = alt;
     visual.loading = 'lazy';
   }
