@@ -47,17 +47,6 @@ window.galleryItems = [
   {
     "title": "",
     "tags": [
-      "art"
-    ],
-    "shortDescription": "",
-    "longDescription": "",
-    "preview": "gallery/g6/preview.jpg",
-    "media": [],
-    "hidePreview": false
-  },
-  {
-    "title": "",
-    "tags": [
       "demo"
     ],
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
