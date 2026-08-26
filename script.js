@@ -1,32 +1,108 @@
 const worksContainer = document.getElementById('works');
+
 const selected = new Set();
+
 const VIDEO_PATTERN = /\.(mp4|webm|ogg|mov|m4v)$/i;
 
-const lazyVideos = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    const video = entry.target;
+const RENDER_BATCH_SIZE = 8;
+const VIDEO_PRELOAD_MARGIN = '500px 0px';
 
-    if (entry.isIntersecting) {
-      if (!video.hasAttribute('src')) {
-        video.src = video.dataset.src;
-        video.load();
-      }
+/*
+ * --------------------------------------------------------------------------
+ * Idle scheduling
+ * --------------------------------------------------------------------------
+ */
 
-      if (video.autoplay) {
-        video.play().catch(() => {});
-      }
-    } else if (video.hasAttribute('src')) {
-      video.pause();
-
-      // Keep the loaded source instead of removing it.
-      // This prevents the video from having to reload every time
-      // it leaves and re-enters the viewport.
+const scheduleIdle = window.requestIdleCallback
+  ? callback => {
+      window.requestIdleCallback(callback, {
+        timeout: 500,
+      });
     }
-  });
-}, {
-  rootMargin: '0px 0px',
-  threshold: 0,
-});
+  : callback => {
+      setTimeout(() => {
+        callback({
+          timeRemaining: () => 8,
+          didTimeout: true,
+        });
+      }, 1);
+    };
+
+/*
+ * --------------------------------------------------------------------------
+ * Main-page video observer
+ * --------------------------------------------------------------------------
+ *
+ * Only MAIN work-preview videos are registered here.
+ *
+ * Mini thumbnails are deliberately NOT registered.
+ *
+ * A main preview:
+ *
+ *   near viewport -> load
+ *   visible       -> play
+ *   leaves        -> pause
+ *
+ * We do NOT remove src when it leaves the viewport.
+ */
+
+const lazyVideos = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      const video = entry.target;
+
+      if (entry.isIntersecting) {
+        loadVideo(video);
+
+        if (
+          video.dataset.playOnVisible === 'true'
+        ) {
+          playVideo(video);
+        }
+
+        return;
+      }
+
+      video.pause();
+    });
+  },
+  {
+    rootMargin: VIDEO_PRELOAD_MARGIN,
+    threshold: 0,
+  },
+);
+
+function loadVideo(video) {
+  if (!(video instanceof HTMLVideoElement)) {
+    return;
+  }
+
+  if (
+    video.hasAttribute('src') ||
+    !video.dataset.src
+  ) {
+    return;
+  }
+
+  video.src = video.dataset.src;
+  video.load();
+}
+
+function playVideo(video) {
+  if (!(video instanceof HTMLVideoElement)) {
+    return;
+  }
+
+  loadVideo(video);
+
+  video.play().catch(() => {});
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * Main visual creation
+ * --------------------------------------------------------------------------
+ */
 
 function createVisual(
   source,
@@ -39,23 +115,44 @@ function createVisual(
   } = {},
 ) {
   const isVideo = VIDEO_PATTERN.test(source);
-  const visual = document.createElement(isVideo ? 'video' : 'img');
+
+  const visual = document.createElement(
+    isVideo ? 'video' : 'img',
+  );
 
   if (visual instanceof HTMLVideoElement) {
     visual.controls = controls;
-    visual.autoplay = autoplay;
+
+    /*
+     * Playback is controlled explicitly by our code.
+     */
+    visual.autoplay = false;
+
     visual.loop = !controls;
     visual.muted = !controls;
     visual.playsInline = true;
-    visual.preload = lazy ? 'none' : 'metadata';
 
-    // Show an image immediately while the video is lazy-loading.
-    if (poster && !VIDEO_PATTERN.test(poster)) {
+    visual.preload = lazy
+      ? 'none'
+      : 'metadata';
+
+    if (
+      poster &&
+      !VIDEO_PATTERN.test(poster)
+    ) {
       visual.poster = poster;
     }
 
+    visual.dataset.playOnVisible =
+      String(autoplay);
+
     if (lazy) {
       visual.dataset.src = source;
+
+      /*
+       * IMPORTANT:
+       * Only main gallery videos are observed.
+       */
       lazyVideos.observe(visual);
     } else {
       visual.src = source;
@@ -63,169 +160,439 @@ function createVisual(
   } else {
     visual.src = source;
     visual.alt = alt;
-    visual.loading = 'lazy';
+
+    visual.loading = lazy
+      ? 'lazy'
+      : 'eager';
+
+    visual.decoding = 'async';
   }
 
   return visual;
 }
 
-function createThumbnail(source, className, poster = '') {
-  const button = document.createElement('button');
-  button.className = className;
-  button.type = 'button';
-  button.setAttribute('aria-label', 'Open media');
+/*
+ * --------------------------------------------------------------------------
+ * Mini thumbnails
+ * --------------------------------------------------------------------------
+ *
+ * Video mini thumbnails remain actual <video> elements.
+ *
+ * But unlike main previews:
+ *
+ * - they are NOT observed by lazyVideos
+ * - they do NOT autoplay
+ * - they use metadata preload
+ * - they stay paused
+ *
+ * This lets the browser display the video's first available frame
+ * without turning every mini into an actively playing video.
+ */
 
-  const visual = createVisual(source, {
-    poster,
-  });
+function createThumbnail(
+  source,
+  className,
+  poster = '',
+) {
+  const button =
+    document.createElement('button');
 
-  visual.removeAttribute('loading');
+  button.className =
+    className;
+
+  button.type =
+    'button';
+
+  button.setAttribute(
+    'aria-label',
+    'Open media',
+  );
+
+  let visual;
+
+  if (VIDEO_PATTERN.test(source)) {
+    visual =
+      document.createElement(
+        'video',
+      );
+
+    visual.muted = true;
+    visual.playsInline = true;
+    visual.loop = false;
+
+    /*
+     * Metadata is enough for the browser to discover
+     * the first frame/dimensions.
+     */
+    visual.preload = 'metadata';
+
+    /*
+     * If a real poster exists, use it immediately.
+     */
+    if (
+      poster &&
+      !VIDEO_PATTERN.test(poster)
+    ) {
+      visual.poster = poster;
+    }
+
+    /*
+     * IMPORTANT:
+     *
+     * This is a thumbnail, so it gets its own src.
+     * It does NOT use createVisual(), because createVisual()
+     * registers videos with the main playback observer.
+     */
+    visual.src = source;
+
+    /*
+     * Explicitly keep it paused.
+     */
+    visual.pause();
+  } else {
+    visual =
+      document.createElement(
+        'img',
+      );
+
+    visual.src = source;
+    visual.alt = '';
+    visual.loading = 'lazy';
+    visual.decoding = 'async';
+  }
+
   visual.tabIndex = -1;
 
-  button.appendChild(visual);
+  button.appendChild(
+    visual,
+  );
 
   return button;
 }
 
+/*
+ * --------------------------------------------------------------------------
+ * Main work media
+ * --------------------------------------------------------------------------
+ */
+
 function createMedia(item) {
-  const media = document.createElement('div');
-  media.className = 'media';
+  const media =
+    document.createElement('div');
+
+  media.className =
+    'media';
+
+  const previewPoster =
+    !VIDEO_PATTERN.test(item.preview)
+      ? item.preview
+      : item.poster || '';
 
   /*
-   * item.poster should be an image URL.
+   * MAIN PREVIEW
    *
-   * If preview itself is an image, it can also be used as the poster.
-   * If preview is a video, use item.poster instead.
+   * This remains an animated video when visible.
    */
-  const previewPoster = !VIDEO_PATTERN.test(item.preview)
-    ? item.preview
-    : item.poster || '';
+  const base =
+    createVisual(
+      item.preview,
+      {
+        alt:
+          item.title || '',
+        autoplay: true,
+        poster:
+          previewPoster,
+      },
+    );
 
-  const base = createVisual(item.preview, {
-    alt: item.title || '',
-    autoplay: true,
-    poster: previewPoster,
-  });
+  base.className =
+    'is-active';
 
-  base.className = 'is-active';
-  media.appendChild(base);
+  media.appendChild(
+    base,
+  );
 
-  const sources = Array.isArray(item.media) ? item.media : [];
+  const sources =
+    Array.isArray(item.media)
+      ? item.media
+      : [];
 
   let index = 0;
   let timer;
   let active = base;
+
+  /*
+   * Cache temporary preview visuals.
+   *
+   * These are main-preview videos/images, not mini thumbnails.
+   */
+  const visualCache =
+    new Map();
 
   const getPoster = source => {
     if (!VIDEO_PATTERN.test(source)) {
       return '';
     }
 
-    // Prefer an explicit poster for the item.
-    if (item.poster && !VIDEO_PATTERN.test(item.poster)) {
+    if (
+      item.poster &&
+      !VIDEO_PATTERN.test(item.poster)
+    ) {
       return item.poster;
     }
 
-    // If the preview is an image, use it as the poster.
-    if (item.preview && !VIDEO_PATTERN.test(item.preview)) {
+    if (
+      item.preview &&
+      !VIDEO_PATTERN.test(item.preview)
+    ) {
       return item.preview;
     }
 
     return '';
   };
 
-  const display = source => {
-    const next = createVisual(source, {
-      autoplay: true,
-      poster: getPoster(source),
-    });
+  const getVisual = source => {
+    if (
+      visualCache.has(source)
+    ) {
+      return visualCache.get(
+        source,
+      );
+    }
 
-    media.appendChild(next);
+    const visual =
+      createVisual(
+        source,
+        {
+          autoplay: true,
+          poster:
+            getPoster(source),
+        },
+      );
+
+    visualCache.set(
+      source,
+      visual,
+    );
+
+    return visual;
+  };
+
+  const display = source => {
+    const next =
+      getVisual(source);
+
+    if (
+      active === next
+    ) {
+      if (
+        next instanceof HTMLVideoElement
+      ) {
+        playVideo(next);
+      }
+
+      return;
+    }
+
+    active.classList.remove(
+      'is-active',
+    );
+
+    if (
+      next.parentNode !== media
+    ) {
+      media.appendChild(
+        next,
+      );
+    }
 
     requestAnimationFrame(() => {
-      next.classList.add('is-active');
+      next.classList.add(
+        'is-active',
+      );
     });
 
-    active.classList.remove('is-active');
-
-    if (active !== base) {
+    /*
+     * Remove the previous temporary visual.
+     *
+     * Keep the base preview.
+     */
+    if (
+      active !== base &&
+      active.parentNode === media
+    ) {
       active.remove();
     }
 
     active = next;
+
+    if (
+      next instanceof HTMLVideoElement
+    ) {
+      loadVideo(next);
+      playVideo(next);
+    }
   };
 
   const show = () => {
-    display(sources[index]);
-    index = (index + 1) % sources.length;
+    if (!sources.length) {
+      return;
+    }
+
+    display(
+      sources[index],
+    );
+
+    index =
+      (index + 1) %
+      sources.length;
   };
 
   const reset = () => {
     clearInterval(timer);
+
     timer = undefined;
     index = 0;
 
-    if (active !== base) {
+    if (
+      active !== base &&
+      active.parentNode === media
+    ) {
       active.remove();
     }
 
     active = base;
-    base.classList.add('is-active');
 
-    if (base instanceof HTMLVideoElement) {
-      base.play().catch(() => {});
+    base.classList.add(
+      'is-active',
+    );
+
+    /*
+     * Restore the animated base preview.
+     */
+    if (
+      base instanceof HTMLVideoElement
+    ) {
+      loadVideo(base);
+      playVideo(base);
     }
   };
 
-  media.showTemporary = source => {
-    clearInterval(timer);
-    timer = undefined;
-    display(source);
-  };
+  /*
+   * Used by mini-thumbnail hover.
+   */
+  media.showTemporary =
+    source => {
+      clearInterval(timer);
 
-  media.restorePreview = reset;
+      timer = undefined;
 
+      display(source);
+    };
+
+  media.restorePreview =
+    reset;
+
+  /*
+   * Main preview hover slideshow.
+   */
   if (sources.length) {
-    media.addEventListener('mouseenter', () => {
-      if (!timer) {
-        show();
-        timer = setInterval(show, 1200);
-      }
-    });
+    media.addEventListener(
+      'mouseenter',
+      () => {
+        if (!timer) {
+          show();
 
-    media.addEventListener('mouseleave', reset);
+          timer =
+            setInterval(
+              show,
+              1200,
+            );
+        }
+      },
+    );
+
+    media.addEventListener(
+      'mouseleave',
+      reset,
+    );
   }
 
   return media;
 }
 
-function renderRichText(container, text) {
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
+/*
+ * --------------------------------------------------------------------------
+ * Rich text
+ * --------------------------------------------------------------------------
+ */
 
-  text.split(urlPattern).forEach(part => {
-    if (urlPattern.test(part)) {
-      const link = document.createElement('a');
-      link.href = part;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = part;
-      container.appendChild(link);
-    } else {
-      container.appendChild(document.createTextNode(part));
-    }
+function renderRichText(
+  container,
+  text,
+) {
+  const urlPattern =
+    /(https?:\/\/[^\s]+)/g;
 
-    urlPattern.lastIndex = 0;
-  });
+  const urlTestPattern =
+    /^https?:\/\/[^\s]+$/;
+
+  text
+    .split(urlPattern)
+    .forEach(part => {
+      if (
+        urlTestPattern.test(part)
+      ) {
+        const link =
+          document.createElement(
+            'a',
+          );
+
+        link.href = part;
+        link.target = '_blank';
+        link.rel =
+          'noopener noreferrer';
+        link.textContent =
+          part;
+
+        container.appendChild(
+          link,
+        );
+      } else {
+        container.appendChild(
+          document.createTextNode(
+            part,
+          ),
+        );
+      }
+    });
 }
 
-function createViewer() {
-  const modal = document.createElement('div');
+/*
+ * --------------------------------------------------------------------------
+ * Gallery viewer
+ * --------------------------------------------------------------------------
+ */
 
-  modal.className = 'gallery-modal';
-  modal.setAttribute('aria-hidden', 'true');
+function createViewer() {
+  const modal =
+    document.createElement(
+      'div',
+    );
+
+  modal.className =
+    'gallery-modal';
+
+  modal.setAttribute(
+    'aria-hidden',
+    'true',
+  );
 
   modal.innerHTML = `
-    <div class="gallery-backdrop" data-gallery-close></div>
+    <div
+      class="gallery-backdrop"
+      data-gallery-close
+    ></div>
 
     <section
       class="gallery-dialog"
@@ -235,12 +602,18 @@ function createViewer() {
     >
       <header class="gallery-header">
         <div>
-          <div class="gallery-kicker">Archive item</div>
+          <div class="gallery-kicker">
+            Archive item
+          </div>
+
           <h2 id="gallery-viewer-title"></h2>
         </div>
 
         <div class="gallery-header-actions">
-          <span class="gallery-counter" aria-live="polite"></span>
+          <span
+            class="gallery-counter"
+            aria-live="polite"
+          ></span>
 
           <button
             class="gallery-close"
@@ -282,14 +655,37 @@ function createViewer() {
     </section>
   `;
 
-  document.body.appendChild(modal);
+  document.body.appendChild(
+    modal,
+  );
 
-  const stage = modal.querySelector('.gallery-stage');
-  const title = modal.querySelector('h2');
-  const longDescription = modal.querySelector('.gallery-long-description');
-  const counter = modal.querySelector('.gallery-counter');
-  const controls = modal.querySelector('.gallery-controls');
-  const thumbnails = modal.querySelector('.gallery-thumbnails');
+  const stage =
+    modal.querySelector(
+      '.gallery-stage',
+    );
+
+  const title =
+    modal.querySelector('h2');
+
+  const longDescription =
+    modal.querySelector(
+      '.gallery-long-description',
+    );
+
+  const counter =
+    modal.querySelector(
+      '.gallery-counter',
+    );
+
+  const controls =
+    modal.querySelector(
+      '.gallery-controls',
+    );
+
+  const thumbnails =
+    modal.querySelector(
+      '.gallery-thumbnails',
+    );
 
   let sources = [];
   let position = 0;
@@ -300,9 +696,15 @@ function createViewer() {
       return '';
     }
 
-    const itemPreview = sources[0];
+    const itemPreview =
+      sources[0];
 
-    if (itemPreview && !VIDEO_PATTERN.test(itemPreview)) {
+    if (
+      itemPreview &&
+      !VIDEO_PATTERN.test(
+        itemPreview,
+      )
+    ) {
       return itemPreview;
     }
 
@@ -310,61 +712,134 @@ function createViewer() {
   };
 
   const show = nextPosition => {
-    position = (nextPosition + sources.length) % sources.length;
+    if (!sources.length) {
+      return;
+    }
 
-    const source = sources[position];
+    position =
+      (
+        nextPosition +
+        sources.length
+      ) %
+      sources.length;
 
-    const visual = createVisual(source, {
-      alt: title.textContent,
-      controls: true,
-      autoplay: true,
-      lazy: false,
-      poster: getPoster(source),
-    });
+    const source =
+      sources[position];
 
-    visual.className = 'gallery-visual';
-
-    stage.replaceChildren(visual);
-
-    counter.textContent = `${position + 1} / ${sources.length}`;
-
-    [...thumbnails.children].forEach((thumbnail, index) => {
-      thumbnail.classList.toggle(
-        'is-active',
-        index === position,
+    const visual =
+      createVisual(
+        source,
+        {
+          alt:
+            title.textContent,
+          controls: true,
+          autoplay: true,
+          lazy: false,
+          poster:
+            getPoster(source),
+        },
       );
-    });
 
-    thumbnails.children[position]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center',
-    });
+    visual.className =
+      'gallery-visual';
 
-    if (visual instanceof HTMLVideoElement) {
-      visual.play().catch(() => {});
+    stage.replaceChildren(
+      visual,
+    );
+
+    counter.textContent =
+      `${position + 1} / ${sources.length}`;
+
+    [...thumbnails.children]
+      .forEach(
+        (
+          thumbnail,
+          index,
+        ) => {
+          thumbnail.classList.toggle(
+            'is-active',
+            index === position,
+          );
+        },
+      );
+
+    /*
+     * Only scroll if selected thumbnail
+     * is actually outside the strip.
+     */
+    const selectedThumbnail =
+      thumbnails.children[position];
+
+    if (selectedThumbnail) {
+      const stripRect =
+        thumbnails.getBoundingClientRect();
+
+      const thumbnailRect =
+        selectedThumbnail.getBoundingClientRect();
+
+      const outside =
+        thumbnailRect.left <
+          stripRect.left ||
+        thumbnailRect.right >
+          stripRect.right;
+
+      if (outside) {
+        selectedThumbnail.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        });
+      }
+    }
+
+    if (
+      visual instanceof HTMLVideoElement
+    ) {
+      visual.play().catch(
+        () => {},
+      );
     }
   };
 
   const close = () => {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove(
+      'is-open',
+    );
 
-    document.body.classList.remove('gallery-modal-open');
+    modal.setAttribute(
+      'aria-hidden',
+      'true',
+    );
 
+    document.body.classList.remove(
+      'gallery-modal-open',
+    );
+
+    /*
+     * Remove viewer media completely.
+     */
     stage.replaceChildren();
 
     returnFocus?.focus();
   };
 
-  const open = (item, trigger, initialPosition = 0) => {
-    const itemMedia = Array.isArray(item.media)
-      ? item.media
-      : [];
+  const open = (
+    item,
+    trigger,
+    initialPosition = 0,
+  ) => {
+    const itemMedia =
+      Array.isArray(item.media)
+        ? item.media
+        : [];
 
-    sources = item.hidePreview
-      ? itemMedia
-      : [item.preview, ...itemMedia];
+    sources =
+      item.hidePreview
+        ? itemMedia
+        : [
+            item.preview,
+            ...itemMedia,
+          ];
 
     if (!sources.length) {
       return;
@@ -372,8 +847,11 @@ function createViewer() {
 
     returnFocus = trigger;
 
-    title.textContent = item.title || '';
-    title.hidden = !item.title;
+    title.textContent =
+      item.title || '';
+
+    title.hidden =
+      !item.title;
 
     longDescription.replaceChildren();
 
@@ -384,25 +862,43 @@ function createViewer() {
       );
     }
 
-    longDescription.hidden = !item.longDescription;
+    longDescription.hidden =
+      !item.longDescription;
 
-    thumbnails.replaceChildren(
-      ...sources.map((source, index) => {
-        const poster = VIDEO_PATTERN.test(source)
-          ? (
-              item.poster ||
-              sources.find(
-                value => !VIDEO_PATTERN.test(value),
-              ) ||
-              ''
-            )
-          : '';
+    /*
+     * Viewer thumbnails are lightweight.
+     *
+     * Video thumbnails remain video elements so they
+     * can display their first frame, but they don't autoplay.
+     */
+    const thumbnailFragment =
+      document.createDocumentFragment();
 
-        const thumbnail = createThumbnail(
-          source,
-          'gallery-thumbnail',
-          poster,
-        );
+    sources.forEach(
+      (
+        source,
+        index,
+      ) => {
+        const poster =
+          VIDEO_PATTERN.test(source)
+            ? (
+                item.poster ||
+                sources.find(
+                  value =>
+                    !VIDEO_PATTERN.test(
+                      value,
+                    ),
+                ) ||
+                ''
+              )
+            : '';
+
+        const thumbnail =
+          createThumbnail(
+            source,
+            'gallery-thumbnail',
+            poster,
+          );
 
         thumbnail.setAttribute(
           'aria-label',
@@ -411,11 +907,19 @@ function createViewer() {
 
         thumbnail.addEventListener(
           'click',
-          () => show(index),
+          () => {
+            show(index);
+          },
         );
 
-        return thumbnail;
-      }),
+        thumbnailFragment.appendChild(
+          thumbnail,
+        );
+      },
+    );
+
+    thumbnails.replaceChildren(
+      thumbnailFragment,
     );
 
     controls.classList.toggle(
@@ -425,65 +929,112 @@ function createViewer() {
 
     show(initialPosition);
 
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add(
+      'is-open',
+    );
 
-    document.body.classList.add('gallery-modal-open');
+    modal.setAttribute(
+      'aria-hidden',
+      'false',
+    );
 
-    modal.querySelector('.gallery-close').focus();
+    document.body.classList.add(
+      'gallery-modal-open',
+    );
+
+    modal
+      .querySelector(
+        '.gallery-close',
+      )
+      .focus();
   };
 
   modal
-    .querySelectorAll('[data-gallery-close]')
-    .forEach(button => {
-      button.addEventListener('click', close);
-    });
+    .querySelectorAll(
+      '[data-gallery-close]',
+    )
+    .forEach(
+      button => {
+        button.addEventListener(
+          'click',
+          close,
+        );
+      },
+    );
 
   modal
-    .querySelector('[data-gallery-previous]')
-    .addEventListener('click', () => {
-      show(position - 1);
-    });
+    .querySelector(
+      '[data-gallery-previous]',
+    )
+    .addEventListener(
+      'click',
+      () => {
+        show(position - 1);
+      },
+    );
 
   modal
-    .querySelector('[data-gallery-next]')
-    .addEventListener('click', () => {
-      show(position + 1);
-    });
+    .querySelector(
+      '[data-gallery-next]',
+    )
+    .addEventListener(
+      'click',
+      () => {
+        show(position + 1);
+      },
+    );
 
-  document.addEventListener('keydown', event => {
-    if (!modal.classList.contains('is-open')) {
-      return;
-    }
+  document.addEventListener(
+    'keydown',
+    event => {
+      if (
+        !modal.classList.contains(
+          'is-open',
+        )
+      ) {
+        return;
+      }
 
-    if (event.key === 'Escape') {
-      close();
-    }
+      if (event.key === 'Escape') {
+        close();
+      }
 
-    if (
-      event.key === 'ArrowLeft' &&
-      sources.length > 1
-    ) {
-      show(position - 1);
-    }
+      if (
+        event.key === 'ArrowLeft' &&
+        sources.length > 1
+      ) {
+        show(position - 1);
+      }
 
-    if (
-      event.key === 'ArrowRight' &&
-      sources.length > 1
-    ) {
-      show(position + 1);
-    }
-  });
+      if (
+        event.key === 'ArrowRight' &&
+        sources.length > 1
+      ) {
+        show(position + 1);
+      }
+    },
+  );
 
-  return { open };
+  return {
+    open,
+  };
 }
 
-const viewer = createViewer();
+const viewer =
+  createViewer();
+
+/*
+ * --------------------------------------------------------------------------
+ * Filtering
+ * --------------------------------------------------------------------------
+ */
 
 function toggle(tag) {
   if (tag === 'all') {
     selected.clear();
-  } else if (selected.has(tag)) {
+  } else if (
+    selected.has(tag)
+  ) {
     selected.delete(tag);
   } else {
     selected.add(tag);
@@ -492,145 +1043,281 @@ function toggle(tag) {
   update();
 }
 
-function renderGallery(items) {
-  items.forEach(item => {
-    const tags = Array.isArray(item.tags)
+/*
+ * --------------------------------------------------------------------------
+ * Work creation
+ * --------------------------------------------------------------------------
+ */
+
+function createWork(item) {
+  const tags =
+    Array.isArray(item.tags)
       ? item.tags
       : [];
 
-    const work = document.createElement('figure');
-
-    work.className = 'work';
-    work.dataset.tags = tags.join(' ');
-    work.tabIndex = 0;
-
-    work.setAttribute(
-      'role',
-      'button',
+  const work =
+    document.createElement(
+      'figure',
     );
 
-    work.setAttribute(
-      'aria-label',
-      item.title
-        ? `Open ${item.title}`
-        : 'Open archive item',
+  work.className =
+    'work';
+
+  /*
+   * Browser can skip expensive rendering
+   * for far-off-screen work.
+   */
+  work.style.contentVisibility =
+    'auto';
+
+  /*
+   * Approximate intrinsic height.
+   * Adjust this to your actual card height.
+   */
+  work.style.containIntrinsicSize =
+    '400px';
+
+  work.dataset.tags =
+    tags.join(' ');
+
+  work.tabIndex = 0;
+
+  work.setAttribute(
+    'role',
+    'button',
+  );
+
+  work.setAttribute(
+    'aria-label',
+    item.title
+      ? `Open ${item.title}`
+      : 'Open archive item',
+  );
+
+  /*
+   * Main preview.
+   */
+  const mediaElement =
+    createMedia(item);
+
+  work.appendChild(
+    mediaElement,
+  );
+
+  /*
+   * Caption.
+   */
+  const caption =
+    document.createElement(
+      'figcaption',
     );
 
-    const mediaElement = createMedia(item);
+  caption.className =
+    'caption';
 
-    work.appendChild(mediaElement);
+  const details =
+    document.createElement(
+      'div',
+    );
 
-    const caption = document.createElement('figcaption');
+  if (item.title) {
+    const title =
+      document.createElement(
+        'div',
+      );
 
-    caption.className = 'caption';
+    title.className =
+      'title';
 
-    const details = document.createElement('div');
+    title.textContent =
+      item.title;
 
-    if (item.title) {
-      const title = document.createElement('div');
+    details.appendChild(
+      title,
+    );
+  }
 
-      title.className = 'title';
-      title.textContent = item.title;
+  /*
+   * Tags.
+   */
+  const tagList =
+    document.createElement(
+      'div',
+    );
 
-      details.appendChild(title);
-    }
+  tagList.className =
+    'tags';
 
-    const tagList = document.createElement('div');
+  tags.forEach(
+    value => {
+      const tag =
+        document.createElement(
+          'button',
+        );
 
-    tagList.className = 'tags';
+      tag.className =
+        'tag';
 
-    tags.forEach(value => {
-      const tag = document.createElement('button');
+      tag.type =
+        'button';
 
-      tag.className = 'tag';
-      tag.type = 'button';
-      tag.dataset.tag = value;
-      tag.textContent = value;
+      tag.dataset.tag =
+        value;
 
-      tag.addEventListener('click', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        toggle(value);
-      });
+      tag.textContent =
+        value;
 
-      tagList.appendChild(tag);
-    });
+      tag.addEventListener(
+        'click',
+        event => {
+          event.preventDefault();
+          event.stopPropagation();
 
-    if (tags.length) {
-      details.appendChild(tagList);
-    }
+          toggle(value);
+        },
+      );
 
-    if (details.children.length) {
-      caption.appendChild(details);
-    }
+      tagList.appendChild(
+        tag,
+      );
+    },
+  );
 
-    if (item.shortDescription) {
-      const description = document.createElement('div');
+  if (tags.length) {
+    details.appendChild(
+      tagList,
+    );
+  }
 
-      description.className = 'description';
-      description.textContent = item.shortDescription;
+  if (details.children.length) {
+    caption.appendChild(
+      details,
+    );
+  }
 
-      caption.appendChild(description);
-    }
+  /*
+   * Description.
+   */
+  if (item.shortDescription) {
+    const description =
+      document.createElement(
+        'div',
+      );
 
-    if (caption.children.length) {
-      work.appendChild(caption);
-    }
+    description.className =
+      'description';
 
-    const itemMedia = Array.isArray(item.media)
+    description.textContent =
+      item.shortDescription;
+
+    caption.appendChild(
+      description,
+    );
+  }
+
+  if (caption.children.length) {
+    work.appendChild(
+      caption,
+    );
+  }
+
+  /*
+   * ------------------------------------------------------------------------
+   * Mini gallery
+   * ------------------------------------------------------------------------
+   */
+
+  const itemMedia =
+    Array.isArray(item.media)
       ? item.media
       : [];
 
-    if (itemMedia.length) {
-      const miniGallery = document.createElement('div');
-
-      miniGallery.className = 'item-mini-gallery';
-
-      miniGallery.setAttribute(
-        'aria-label',
-        'Item media previews',
+  if (itemMedia.length) {
+    const miniGallery =
+      document.createElement(
+        'div',
       );
 
-      itemMedia.forEach((source, index) => {
-        const poster = VIDEO_PATTERN.test(source)
-          ? (
-              item.poster ||
-              (!VIDEO_PATTERN.test(item.preview)
-                ? item.preview
-                : '')
-            )
-          : '';
+    miniGallery.className =
+      'item-mini-gallery';
 
-        const thumbnail = createThumbnail(
-          source,
-          'item-mini-thumbnail',
-          poster,
-        );
+    miniGallery.setAttribute(
+      'aria-label',
+      'Item media previews',
+    );
+
+    itemMedia.forEach(
+      (
+        source,
+        index,
+      ) => {
+        /*
+         * Video mini:
+         *
+         * item.poster if available
+         * otherwise image preview if available
+         * otherwise video's own first frame
+         */
+        const poster =
+          VIDEO_PATTERN.test(source)
+            ? (
+                item.poster ||
+                (
+                  !VIDEO_PATTERN.test(
+                    item.preview,
+                  )
+                    ? item.preview
+                    : ''
+                )
+              )
+            : '';
+
+        const thumbnail =
+          createThumbnail(
+            source,
+            'item-mini-thumbnail',
+            poster,
+          );
 
         thumbnail.setAttribute(
           'aria-label',
           `Open media ${index + 1}`,
         );
 
-        thumbnail.addEventListener('click', event => {
-          event.stopPropagation();
-
-          viewer.open(
-            item,
-            thumbnail,
-            item.hidePreview
-              ? index
-              : index + 1,
-          );
-        });
-
+        /*
+         * Click opens viewer.
+         */
         thumbnail.addEventListener(
-          'mouseenter',
-          () => {
-            mediaElement.showTemporary(source);
+          'click',
+          event => {
+            event.stopPropagation();
+
+            viewer.open(
+              item,
+              thumbnail,
+              item.hidePreview
+                ? index
+                : index + 1,
+            );
           },
         );
 
+        /*
+         * Hover replaces main preview
+         * with actual media.
+         */
+        thumbnail.addEventListener(
+          'mouseenter',
+          () => {
+            mediaElement.showTemporary(
+              source,
+            );
+          },
+        );
+
+        /*
+         * Restore animated main preview.
+         */
         thumbnail.addEventListener(
           'mouseleave',
           () => {
@@ -638,17 +1325,36 @@ function renderGallery(items) {
           },
         );
 
-        miniGallery.appendChild(thumbnail);
-      });
+        miniGallery.appendChild(
+          thumbnail,
+        );
+      },
+    );
 
-      work.appendChild(miniGallery);
-    }
+    work.appendChild(
+      miniGallery,
+    );
+  }
 
-    work.addEventListener('click', () => {
-      viewer.open(item, work);
-    });
+  /*
+   * Open item viewer.
+   */
+  work.addEventListener(
+    'click',
+    () => {
+      viewer.open(
+        item,
+        work,
+      );
+    },
+  );
 
-    work.addEventListener('keydown', event => {
+  /*
+   * Keyboard accessibility.
+   */
+  work.addEventListener(
+    'keydown',
+    event => {
       if (
         event.target === work &&
         (
@@ -657,121 +1363,282 @@ function renderGallery(items) {
         )
       ) {
         event.preventDefault();
-        viewer.open(item, work);
-      }
-    });
 
-    worksContainer.appendChild(work);
-  });
+        viewer.open(
+          item,
+          work,
+        );
+      }
+    },
+  );
+
+  return work;
 }
 
+/*
+ * --------------------------------------------------------------------------
+ * Progressive gallery rendering
+ * --------------------------------------------------------------------------
+ */
+
+let renderedCount = 0;
+let galleryRenderItems = [];
+
+function renderGalleryChunk() {
+  if (
+    renderedCount >=
+    galleryRenderItems.length
+  ) {
+    return;
+  }
+
+  const fragment =
+    document.createDocumentFragment();
+
+  const end =
+    Math.min(
+      renderedCount +
+        RENDER_BATCH_SIZE,
+      galleryRenderItems.length,
+    );
+
+  for (
+    let index = renderedCount;
+    index < end;
+    index++
+  ) {
+    fragment.appendChild(
+      createWork(
+        galleryRenderItems[index],
+      ),
+    );
+  }
+
+  worksContainer.appendChild(
+    fragment,
+  );
+
+  renderedCount = end;
+
+  if (
+    renderedCount <
+    galleryRenderItems.length
+  ) {
+    scheduleIdle(
+      renderGalleryChunk,
+    );
+  }
+}
+
+function renderGallery(items) {
+  renderedCount = 0;
+
+  galleryRenderItems =
+    items;
+
+  worksContainer.replaceChildren();
+
+  renderGalleryChunk();
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * Filters
+ * --------------------------------------------------------------------------
+ */
+
 function renderFilters(items) {
-  const container = document.querySelector('.filters');
+  const container =
+    document.querySelector(
+      '.filters',
+    );
+
+  if (!container) {
+    return;
+  }
 
   const tags = [
     ...new Set(
-      items.flatMap(item =>
-        Array.isArray(item.tags)
-          ? item.tags
-          : [],
+      items.flatMap(
+        item =>
+          Array.isArray(item.tags)
+            ? item.tags
+            : [],
       ),
     ),
   ];
 
-  tags.forEach(value => {
-    const filter = document.createElement('button');
+  const fragment =
+    document.createDocumentFragment();
 
-    filter.className = 'filter';
-    filter.type = 'button';
-    filter.dataset.filter = value;
-    filter.textContent = value;
+  tags.forEach(
+    value => {
+      const filter =
+        document.createElement(
+          'button',
+        );
 
-    container.appendChild(filter);
-  });
+      filter.className =
+        'filter';
+
+      filter.type =
+        'button';
+
+      filter.dataset.filter =
+        value;
+
+      filter.textContent =
+        value;
+
+      fragment.appendChild(
+        filter,
+      );
+    },
+  );
+
+  container.appendChild(
+    fragment,
+  );
 }
 
-const galleryItems = Array.isArray(window.galleryItems)
-  ? window.galleryItems
-  : [];
+const galleryItems =
+  Array.isArray(
+    window.galleryItems,
+  )
+    ? window.galleryItems
+    : [];
 
-renderFilters(galleryItems);
-renderGallery(galleryItems);
+renderFilters(
+  galleryItems,
+);
+
+renderGallery(
+  galleryItems,
+);
 
 const filters = [
-  ...document.querySelectorAll('.filter'),
+  ...document.querySelectorAll(
+    '.filter',
+  ),
 ];
 
-const works = [
-  ...document.querySelectorAll('.work'),
-];
+/*
+ * --------------------------------------------------------------------------
+ * Filter state
+ * --------------------------------------------------------------------------
+ */
 
 function syncTags() {
-  document.querySelectorAll('.tag').forEach(tag => {
-    tag.classList.toggle(
-      'active',
-      selected.has(tag.dataset.tag),
+  document
+    .querySelectorAll('.tag')
+    .forEach(
+      tag => {
+        tag.classList.toggle(
+          'active',
+          selected.has(
+            tag.dataset.tag,
+          ),
+        );
+      },
     );
-  });
 }
 
 function update() {
-  works.forEach(work => {
-    const tags = work.dataset.tags
-      .split(/\s+/)
-      .filter(Boolean);
+  const works = [
+    ...document.querySelectorAll(
+      '.work',
+    ),
+  ];
 
-    work.classList.toggle(
-      'is-hidden',
-      selected.size > 0 &&
-        !tags.some(tag => selected.has(tag)),
-    );
-  });
+  works.forEach(
+    work => {
+      const tags =
+        work.dataset.tags
+          .split(/\s+/)
+          .filter(Boolean);
 
-  filters.forEach(filter => {
-    filter.classList.toggle(
-      'active',
-      filter.dataset.filter === 'all'
-        ? !selected.size
-        : selected.has(filter.dataset.filter),
-    );
-  });
+      work.classList.toggle(
+        'is-hidden',
+        selected.size > 0 &&
+          !tags.some(
+            tag =>
+              selected.has(tag),
+          ),
+      );
+    },
+  );
+
+  filters.forEach(
+    filter => {
+      filter.classList.toggle(
+        'active',
+        filter.dataset.filter ===
+          'all'
+          ? !selected.size
+          : selected.has(
+              filter.dataset.filter,
+            ),
+      );
+    },
+  );
 
   syncTags();
 }
 
-filters.forEach(filter => {
-  filter.addEventListener(
-    'click',
-    () => toggle(filter.dataset.filter),
-  );
-});
+filters.forEach(
+  filter => {
+    filter.addEventListener(
+      'click',
+      () => {
+        toggle(
+          filter.dataset.filter,
+        );
+      },
+    );
+  },
+);
 
-/* Contact modal */
+/*
+ * --------------------------------------------------------------------------
+ * Contact modal
+ * --------------------------------------------------------------------------
+ */
+
 (() => {
-  const modal = document.getElementById(
-    'contact-modal',
-  );
+  const modal =
+    document.getElementById(
+      'contact-modal',
+    );
 
-  const openButton = document.getElementById(
-    'contact-open',
-  );
+  const openButton =
+    document.getElementById(
+      'contact-open',
+    );
 
-  const closeButtons = modal
-    ? modal.querySelectorAll(
-        '[data-contact-close]',
-      )
-    : [];
+  const closeButtons =
+    modal
+      ? modal.querySelectorAll(
+          '[data-contact-close]',
+        )
+      : [];
 
-  let lastFocusedElement = null;
+  let lastFocusedElement =
+    null;
 
-  if (!modal || !openButton) {
+  if (
+    !modal ||
+    !openButton
+  ) {
     return;
   }
 
   const openModal = () => {
-    lastFocusedElement = document.activeElement;
+    lastFocusedElement =
+      document.activeElement;
 
-    modal.classList.add('is-open');
+    modal.classList.add(
+      'is-open',
+    );
 
     modal.setAttribute(
       'aria-hidden',
@@ -783,12 +1650,16 @@ filters.forEach(filter => {
     );
 
     modal
-      .querySelector('.contact-close')
+      .querySelector(
+        '.contact-close',
+      )
       ?.focus();
   };
 
   const closeModal = () => {
-    modal.classList.remove('is-open');
+    modal.classList.remove(
+      'is-open',
+    );
 
     modal.setAttribute(
       'aria-hidden',
@@ -807,19 +1678,26 @@ filters.forEach(filter => {
     openModal,
   );
 
-  closeButtons.forEach(button => {
-    button.addEventListener(
-      'click',
-      closeModal,
-    );
-  });
+  closeButtons.forEach(
+    button => {
+      button.addEventListener(
+        'click',
+        closeModal,
+      );
+    },
+  );
 
-  document.addEventListener('keydown', event => {
-    if (
-      event.key === 'Escape' &&
-      modal.classList.contains('is-open')
-    ) {
-      closeModal();
-    }
-  });
+  document.addEventListener(
+    'keydown',
+    event => {
+      if (
+        event.key === 'Escape' &&
+        modal.classList.contains(
+          'is-open',
+        )
+      ) {
+        closeModal();
+      }
+    },
+  );
 })();
