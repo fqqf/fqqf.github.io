@@ -130,11 +130,12 @@ window.galleryItems = [
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
     "preview": "gallery/g13/preview.mp4",
     "media": [
-      "gallery/g13/1.jpg",
+      "gallery/g13/1.mp4",
       "gallery/g13/2.jpg",
-      "gallery/g13/3.jpg"
+      "gallery/g13/3.jpg",
+      "gallery/g13/4.jpg"
     ],
-    "hidePreview": false
+    "hidePreview": true
   },
   {
     "title": "Drumir",
