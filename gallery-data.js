@@ -130,7 +130,6 @@ window.galleryItems = [
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
     "preview": "gallery/g13/preview.mp4",
     "media": [
-      "gallery/g13/1.mp4",
       "gallery/g13/2.jpg",
       "gallery/g13/3.jpg",
       "gallery/g13/4.jpg"
@@ -147,8 +146,7 @@ window.galleryItems = [
     "preview": "gallery/g14/preview.mp4",
     "media": [
       "gallery/g14/1.mp4",
-      "gallery/g14/2.mp4",
-      "gallery/g14/11.mp4"
+      "gallery/g14/2.mp4"
     ],
     "hidePreview": false
   },
@@ -160,9 +158,7 @@ window.galleryItems = [
     "shortDescription": "Snippet of a game for Godot Wild Jam #51",
     "longDescription": "",
     "preview": "gallery/g15/preview.gif",
-    "media": [
-      "gallery/g15/2.mp4"
-    ],
+    "media": [],
     "hidePreview": true
   },
   {
