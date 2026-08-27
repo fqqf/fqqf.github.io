@@ -147,7 +147,9 @@ window.galleryItems = [
     "shortDescription": "Snippet of a game for Godot Wild Jam #51",
     "longDescription": "",
     "preview": "gallery/g15/preview.gif",
-    "media": [],
+    "media": [
+      "gallery/g15/1.mp4"
+    ],
     "hidePreview": true
   },
   {
