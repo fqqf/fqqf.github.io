@@ -8,8 +8,8 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g2/preview.webm",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g2/preview.webm",
       "kind": "video",
@@ -20,6 +20,7 @@ window.galleryItems = [
       "poster": "gallery/g2/opt/preview-poster.webp",
       "thumb": "gallery/g2/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -30,8 +31,8 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g3/preview.webm",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g3/preview.webm",
       "kind": "video",
@@ -42,6 +43,7 @@ window.galleryItems = [
       "poster": "gallery/g3/opt/preview-poster.webp",
       "thumb": "gallery/g3/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -52,8 +54,8 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g4/preview.webm",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g4/preview.webm",
       "kind": "video",
@@ -64,6 +66,7 @@ window.galleryItems = [
       "poster": "gallery/g4/opt/preview-poster.webp",
       "thumb": "gallery/g4/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -74,8 +77,8 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g5/preview.jpg",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g5/preview.jpg",
       "kind": "image",
@@ -87,6 +90,7 @@ window.galleryItems = [
       "narrowW": 640,
       "thumb": "gallery/g5/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -97,8 +101,8 @@ window.galleryItems = [
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
     "preview": "gallery/g7/preview.webm",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g7/preview.webm",
       "kind": "video",
@@ -111,6 +115,7 @@ window.galleryItems = [
       "poster": "gallery/g7/opt/preview-poster.webp",
       "thumb": "gallery/g7/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -121,8 +126,8 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g8/preview.jpg",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g8/preview.jpg",
       "kind": "image",
@@ -134,6 +139,7 @@ window.galleryItems = [
       "narrowW": 640,
       "thumb": "gallery/g8/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -144,8 +150,8 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g9/preview.jpg",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g9/preview.jpg",
       "kind": "image",
@@ -157,6 +163,7 @@ window.galleryItems = [
       "narrowW": 640,
       "thumb": "gallery/g9/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -167,8 +174,8 @@ window.galleryItems = [
     "shortDescription": "Logo animation for MART in 2017",
     "longDescription": "Logo animation for MART in 2017\nMy first paid vector animation\n\nLooking back i completely dislike how it turned out, i could've done it way better.",
     "preview": "gallery/g10/preview.webm",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g10/preview.webm",
       "kind": "video",
@@ -181,6 +188,7 @@ window.galleryItems = [
       "poster": "gallery/g10/opt/preview-poster.webp",
       "thumb": "gallery/g10/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -191,8 +199,8 @@ window.galleryItems = [
     "shortDescription": "Dynamic analysis tool for identifying instruction pointers processing pattern in memory",
     "longDescription": "Dynamic analysis tool for identifying instruction pointers processing pattern in memory \nSource: https://miracula.space/files/bingrep.zip",
     "preview": "gallery/g11/preview.png",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g11/preview.png",
       "kind": "image",
@@ -204,6 +212,7 @@ window.galleryItems = [
       "narrowW": 640,
       "thumb": "gallery/g11/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -214,8 +223,8 @@ window.galleryItems = [
     "shortDescription": "Short platformer in white-black tones",
     "longDescription": "Short platformer in white-black tones\n\nMade in 2021 with uheartbeast\n\nSource: https://icx.itch.io/melancholy-fight",
     "preview": "gallery/g12/preview.mp4",
+    "fullsizePreview": "",
     "media": [],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g12/preview.mp4",
       "kind": "video",
@@ -228,6 +237,7 @@ window.galleryItems = [
       "poster": "gallery/g12/opt/preview-poster.webp",
       "thumb": "gallery/g12/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -238,12 +248,12 @@ window.galleryItems = [
     "shortDescription": "2D runner with platforming. Defeat and tame monsters, find new locations",
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
     "preview": "gallery/g13/preview.mp4",
+    "fullsizePreview": "",
     "media": [
       "gallery/g13/2.jpg",
       "gallery/g13/3.jpg",
       "gallery/g13/4.jpg"
     ],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g13/preview.mp4",
       "kind": "video",
@@ -256,6 +266,7 @@ window.galleryItems = [
       "poster": "gallery/g13/opt/preview-poster.webp",
       "thumb": "gallery/g13/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": [
       {
         "src": "gallery/g13/2.jpg",
@@ -300,11 +311,11 @@ window.galleryItems = [
     "shortDescription": "World exploration multiplayer game based on DCC by Matt Dinniman",
     "longDescription": "World exploration multiplayer game based on DCC by Matt Dinniman\n\nIn development right now, looking for 2nd artist for this project.\n2026",
     "preview": "gallery/g14/preview.webm",
+    "fullsizePreview": "",
     "media": [
       "gallery/g14/1.webm",
       "gallery/g14/2.mp4"
     ],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g14/preview.webm",
       "kind": "video",
@@ -317,6 +328,7 @@ window.galleryItems = [
       "poster": "gallery/g14/opt/preview-poster.webp",
       "thumb": "gallery/g14/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": [
       {
         "src": "gallery/g14/1.webm",
@@ -352,10 +364,8 @@ window.galleryItems = [
     "shortDescription": "Snippet of a game for Godot Wild Jam #51",
     "longDescription": "",
     "preview": "gallery/g15/preview.gif",
-    "media": [
-      "gallery/g15/1.mp4"
-    ],
-    "hidePreview": true,
+    "fullsizePreview": "gallery/g15/fullsize_preview.mp4",
+    "media": [],
     "previewAsset": {
       "src": "gallery/g15/preview.gif",
       "kind": "video",
@@ -366,20 +376,15 @@ window.galleryItems = [
       "poster": "gallery/g15/opt/preview-poster.webp",
       "thumb": "gallery/g15/opt/preview-thumb.webp"
     },
-    "mediaAssets": [
-      {
-        "src": "gallery/g15/1.mp4",
-        "kind": "video",
-        "width": 1920,
-        "height": 1080,
-        "wide": "gallery/g15/opt/m1-960.mp4",
-        "wideW": 960,
-        "narrow": "gallery/g15/opt/m1-640.mp4",
-        "narrowW": 640,
-        "poster": "gallery/g15/opt/m1-poster.webp",
-        "thumb": "gallery/g15/opt/m1-thumb.webp"
-      }
-    ]
+    "fullsizeAsset": {
+      "src": "gallery/g15/fullsize_preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "poster": "gallery/g15/opt/fullsize-poster.webp",
+      "thumb": "gallery/g15/opt/fullsize-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -389,11 +394,11 @@ window.galleryItems = [
     "shortDescription": "3D hyperrealistic maze generation backtracking algorithm in Unreal Engine 5",
     "longDescription": "3D hyperrealistic maze generation backtracking algorithm in Unreal Engine 5.\n\nFeed it an image, and it spits out 3d realistic maze based on that image.\n\nSource: https://github.com/fqqf/backtracking-3d-generator",
     "preview": "gallery/g16/preview.png",
+    "fullsizePreview": "",
     "media": [
       "gallery/g16/1.jpg",
       "gallery/g16/2.jpg"
     ],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g16/preview.png",
       "kind": "image",
@@ -405,6 +410,7 @@ window.galleryItems = [
       "narrowW": 640,
       "thumb": "gallery/g16/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": [
       {
         "src": "gallery/g16/1.jpg",
@@ -438,11 +444,11 @@ window.galleryItems = [
     "shortDescription": "Demo of rimworld-like game made to test AI for Drumir",
     "longDescription": "Demo of rimworld-like game made to test AI for Drumir\n\nClosed source.",
     "preview": "gallery/g18/preview.mp4",
+    "fullsizePreview": "",
     "media": [
       "gallery/g18/1.jpg",
       "gallery/g18/2.mp4"
     ],
-    "hidePreview": false,
     "previewAsset": {
       "src": "gallery/g18/preview.mp4",
       "kind": "video",
@@ -455,6 +461,7 @@ window.galleryItems = [
       "poster": "gallery/g18/opt/preview-poster.webp",
       "thumb": "gallery/g18/opt/preview-thumb.webp"
     },
+    "fullsizeAsset": null,
     "mediaAssets": [
       {
         "src": "gallery/g18/1.jpg",

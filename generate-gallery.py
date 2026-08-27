@@ -38,6 +38,12 @@ OUTPUT = ROOT / "gallery-data.js"
 OPT_DIRNAME = "opt"
 MANIFEST_NAME = "manifest.json"
 
+# A folder may ship "preview.*" (what the grid card shows) plus an optional
+# "fullsize_preview.*" - the heavier cut the modal opens instead of the
+# preview.  The extension of either does not matter, only the stem.
+PREVIEW_STEM = "preview"
+FULLSIZE_STEM = "fullsize_preview"
+
 VIDEO_EXTENSIONS = {".m4v", ".mov", ".mp4", ".ogg", ".webm"}
 IMAGE_EXTENSIONS = {".avif", ".bmp", ".jpeg", ".jpg", ".png", ".svg", ".webp"}
 ANIMATED_IMAGE_EXTENSIONS = {".gif"}
@@ -200,12 +206,34 @@ def video_params(box: int, fps_cap: int, max_seconds: int) -> str:
 
 
 def plan_proxies(source: Path, opt_dir: Path, slug: str, fps_cap: int,
-                 max_seconds: int, want_thumb: bool):
+                 max_seconds: int, want_thumb: bool, stills_only: bool = False):
     """Describe every derived file for one source as {role, path, encode, params}."""
     info = probe(source)
     width = int(info.get("width") or 0)
     fps = float(info.get("fps") or 0.0)
     kind = kind_of(source)
+
+    if stills_only:
+        # Never rendered inside the grid, so the playable tiers would be dead
+        # weight: a poster to sit under the modal's <video> and a strip
+        # thumbnail is the whole requirement.
+        jobs = []
+        if kind in ("video", "animated"):
+            jobs.append({
+                "role": "poster",
+                "path": opt_dir / "{}-poster.webp".format(slug),
+                "encode": (lambda s, t: encode_still(s, t, POSTER_WIDTH, POSTER_QUALITY, True)),
+                "params": "p{}qs{}e{}".format(POSTER_WIDTH, POSTER_QUALITY, WEBP_EFFORT),
+            })
+        if want_thumb:
+            from_video = kind != "image"
+            jobs.append({
+                "role": "thumb",
+                "path": opt_dir / "{}-thumb.webp".format(slug),
+                "encode": (lambda s, t, fv=from_video: encode_still(s, t, THUMB_WIDTH, POSTER_QUALITY, fv)),
+                "params": "t{}qs{}e{}".format(THUMB_WIDTH, POSTER_QUALITY, WEBP_EFFORT),
+            })
+        return jobs, info, kind
 
     def tier_box(box: int) -> int:
         return min(box, width) if width else box
@@ -316,11 +344,12 @@ class ProxyBuilder:
                 self.manifests[opt_dir] = {}
         return self.manifests[opt_dir]
 
-    def request(self, source: Path, slug: str, want_thumb: bool) -> dict[str, object]:
+    def request(self, source: Path, slug: str, want_thumb: bool,
+                stills_only: bool = False) -> dict[str, object]:
         """Queue proxies for `source` and return the resulting asset record."""
         opt_dir = source.parent / OPT_DIRNAME
         jobs, info, kind = plan_proxies(source, opt_dir, slug, self.fps_cap,
-                                       self.max_seconds, want_thumb)
+                                       self.max_seconds, want_thumb, stills_only)
 
         record = {
             "src": source.relative_to(ROOT).as_posix(),
@@ -417,13 +446,18 @@ def build_items(builder: ProxyBuilder) -> list[dict[str, object]]:
     folders = sorted((path for path in GALLERY.glob("g*") if path.is_dir()), key=natural_key)
 
     for folder in folders:
-        preview_files = sorted(
-            path for path in folder.iterdir()
-            if path.is_file() and path.stem.lower() == "preview" and path.suffix.lower() in MEDIA_EXTENSIONS
-        )
-        if not preview_files:
+        def named(stem: str):
+            matches = sorted(
+                path for path in folder.iterdir()
+                if path.is_file() and path.stem.lower() == stem
+                and path.suffix.lower() in MEDIA_EXTENSIONS
+            )
+            return matches[0] if matches else None
+
+        preview = named(PREVIEW_STEM)
+        if preview is None:
             continue
-        preview = preview_files[0]
+        fullsize = named(FULLSIZE_STEM)
         media = sorted(
             (
                 path for path in folder.iterdir()
@@ -434,6 +468,10 @@ def build_items(builder: ProxyBuilder) -> list[dict[str, object]]:
         tags, title, short_description, long_description = read_metadata(folder)
 
         preview_asset = builder.request(preview, "preview", want_thumb=True)
+        fullsize_asset = (
+            builder.request(fullsize, "fullsize", want_thumb=True, stills_only=True)
+            if fullsize else None
+        )
         media_assets = [
             builder.request(path, "m{}".format(index + 1), want_thumb=True)
             for index, path in enumerate(media)
@@ -445,9 +483,10 @@ def build_items(builder: ProxyBuilder) -> list[dict[str, object]]:
             "shortDescription": short_description,
             "longDescription": long_description,
             "preview": preview.relative_to(ROOT).as_posix(),
+            "fullsizePreview": fullsize.relative_to(ROOT).as_posix() if fullsize else "",
             "media": [path.relative_to(ROOT).as_posix() for path in media],
-            "hidePreview": (folder / "hide_preview").is_file(),
             "previewAsset": preview_asset,
+            "fullsizeAsset": fullsize_asset,
             "mediaAssets": media_assets,
         })
 

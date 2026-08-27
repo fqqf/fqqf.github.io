@@ -141,7 +141,7 @@ function tierFor(asset, cssWidth) {
   return (fit || tiers[tiers.length - 1]).url;
 }
 
-/** Assets for [preview, ...media], aligned with the modal's source list. */
+/** Assets for [preview, ...media]: what a card shows and cycles through. */
 function assetsFor(item) {
   const media = Array.isArray(item.media) ? item.media : [];
   const mediaAssets = Array.isArray(item.mediaAssets) ? item.mediaAssets : [];
@@ -149,6 +149,20 @@ function assetsFor(item) {
     resolveAsset(item.previewAsset, item.preview),
     ...media.map((src, index) => resolveAsset(mediaAssets[index], src)),
   ];
+}
+
+/**
+ * Same list the modal walks, except slot 0 is the full size cut when the
+ * folder ships one (fullsize_preview.*).  That way a card can loop a small,
+ * cheap preview while opening it still lands on the real thing - and the
+ * heavy cut never shows up as an extra entry anywhere.
+ */
+function viewerAssetsFor(item) {
+  const entries = assetsFor(item);
+  if (item.fullsizeAsset || item.fullsizePreview) {
+    entries[0] = resolveAsset(item.fullsizeAsset, item.fullsizePreview);
+  }
+  return entries;
 }
 
 
@@ -801,8 +815,7 @@ function createViewer() {
 
   return {
     open(item, source, startIndex = 0) {
-      const all = assetsFor(item);
-      entries = item.hidePreview ? all.slice(1) : all;
+      entries = viewerAssetsFor(item);
       if (!entries.length) return;
 
       opener = source;
@@ -913,7 +926,7 @@ function createWork(item) {
       const thumbnail = createThumbnail(asset, "item-mini-thumbnail", `Open media ${position + 1}`);
       thumbnail.addEventListener("click", (event) => {
         event.stopPropagation();
-        viewer.open(item, thumbnail, item.hidePreview ? position : position + 1);
+        viewer.open(item, thumbnail, position + 1);
       });
       thumbnail.addEventListener("mouseenter", () => media.controller.showTemporary(position));
       thumbnail.addEventListener("mouseleave", () => media.controller.restorePreview());
