@@ -9,7 +9,18 @@ window.galleryItems = [
     "longDescription": "",
     "preview": "gallery/g2/preview.webm",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g2/preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 230,
+      "wide": "gallery/g2/opt/preview-320.mp4",
+      "wideW": 320,
+      "poster": "gallery/g2/opt/preview-poster.webp",
+      "thumb": "gallery/g2/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -20,7 +31,18 @@ window.galleryItems = [
     "longDescription": "",
     "preview": "gallery/g3/preview.webm",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g3/preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 268,
+      "wide": "gallery/g3/opt/preview-320.mp4",
+      "wideW": 320,
+      "poster": "gallery/g3/opt/preview-poster.webp",
+      "thumb": "gallery/g3/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -31,7 +53,18 @@ window.galleryItems = [
     "longDescription": "",
     "preview": "gallery/g4/preview.webm",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g4/preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 180,
+      "wide": "gallery/g4/opt/preview-320.mp4",
+      "wideW": 320,
+      "poster": "gallery/g4/opt/preview-poster.webp",
+      "thumb": "gallery/g4/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -42,7 +75,19 @@ window.galleryItems = [
     "longDescription": "",
     "preview": "gallery/g5/preview.jpg",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g5/preview.jpg",
+      "kind": "image",
+      "width": 1270,
+      "height": 686,
+      "wide": "gallery/g5/opt/preview-960.webp",
+      "wideW": 960,
+      "narrow": "gallery/g5/opt/preview-640.webp",
+      "narrowW": 640,
+      "thumb": "gallery/g5/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -53,7 +98,20 @@ window.galleryItems = [
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
     "preview": "gallery/g7/preview.webm",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g7/preview.webm",
+      "kind": "video",
+      "width": 1632,
+      "height": 948,
+      "wide": "gallery/g7/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g7/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g7/opt/preview-poster.webp",
+      "thumb": "gallery/g7/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -64,7 +122,19 @@ window.galleryItems = [
     "longDescription": "",
     "preview": "gallery/g8/preview.jpg",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g8/preview.jpg",
+      "kind": "image",
+      "width": 1149,
+      "height": 629,
+      "wide": "gallery/g8/opt/preview-960.webp",
+      "wideW": 960,
+      "narrow": "gallery/g8/opt/preview-640.webp",
+      "narrowW": 640,
+      "thumb": "gallery/g8/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -75,7 +145,19 @@ window.galleryItems = [
     "longDescription": "",
     "preview": "gallery/g9/preview.jpg",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g9/preview.jpg",
+      "kind": "image",
+      "width": 1280,
+      "height": 720,
+      "wide": "gallery/g9/opt/preview-960.webp",
+      "wideW": 960,
+      "narrow": "gallery/g9/opt/preview-640.webp",
+      "narrowW": 640,
+      "thumb": "gallery/g9/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -86,7 +168,20 @@ window.galleryItems = [
     "longDescription": "Logo animation for MART in 2017\nMy first paid vector animation\n\nLooking back i completely dislike how it turned out, i could've done it way better.",
     "preview": "gallery/g10/preview.webm",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g10/preview.webm",
+      "kind": "video",
+      "width": 1168,
+      "height": 800,
+      "wide": "gallery/g10/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g10/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g10/opt/preview-poster.webp",
+      "thumb": "gallery/g10/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -97,7 +192,19 @@ window.galleryItems = [
     "longDescription": "Dynamic analysis tool for identifying instruction pointers processing pattern in memory \nSource: https://miracula.space/files/bingrep.zip",
     "preview": "gallery/g11/preview.png",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g11/preview.png",
+      "kind": "image",
+      "width": 965,
+      "height": 846,
+      "wide": "gallery/g11/opt/preview-960.webp",
+      "wideW": 960,
+      "narrow": "gallery/g11/opt/preview-640.webp",
+      "narrowW": 640,
+      "thumb": "gallery/g11/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -108,7 +215,20 @@ window.galleryItems = [
     "longDescription": "Short platformer in white-black tones\n\nMade in 2021 with uheartbeast\n\nSource: https://icx.itch.io/melancholy-fight",
     "preview": "gallery/g12/preview.mp4",
     "media": [],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g12/preview.mp4",
+      "kind": "video",
+      "width": 1272,
+      "height": 712,
+      "wide": "gallery/g12/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g12/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g12/opt/preview-poster.webp",
+      "thumb": "gallery/g12/opt/preview-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "",
@@ -123,7 +243,54 @@ window.galleryItems = [
       "gallery/g13/3.jpg",
       "gallery/g13/4.jpg"
     ],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g13/preview.mp4",
+      "kind": "video",
+      "width": 1392,
+      "height": 592,
+      "wide": "gallery/g13/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g13/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g13/opt/preview-poster.webp",
+      "thumb": "gallery/g13/opt/preview-thumb.webp"
+    },
+    "mediaAssets": [
+      {
+        "src": "gallery/g13/2.jpg",
+        "kind": "image",
+        "width": 1162,
+        "height": 618,
+        "wide": "gallery/g13/opt/m1-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g13/opt/m1-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g13/opt/m1-thumb.webp"
+      },
+      {
+        "src": "gallery/g13/3.jpg",
+        "kind": "image",
+        "width": 1280,
+        "height": 607,
+        "wide": "gallery/g13/opt/m2-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g13/opt/m2-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g13/opt/m2-thumb.webp"
+      },
+      {
+        "src": "gallery/g13/4.jpg",
+        "kind": "image",
+        "width": 1280,
+        "height": 420,
+        "wide": "gallery/g13/opt/m3-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g13/opt/m3-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g13/opt/m3-thumb.webp"
+      }
+    ]
   },
   {
     "title": "Drumir",
@@ -137,7 +304,45 @@ window.galleryItems = [
       "gallery/g14/1.webm",
       "gallery/g14/2.mp4"
     ],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g14/preview.webm",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "wide": "gallery/g14/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g14/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g14/opt/preview-poster.webp",
+      "thumb": "gallery/g14/opt/preview-thumb.webp"
+    },
+    "mediaAssets": [
+      {
+        "src": "gallery/g14/1.webm",
+        "kind": "video",
+        "width": 1920,
+        "height": 1080,
+        "wide": "gallery/g14/opt/m1-960.mp4",
+        "wideW": 960,
+        "narrow": "gallery/g14/opt/m1-640.mp4",
+        "narrowW": 640,
+        "poster": "gallery/g14/opt/m1-poster.webp",
+        "thumb": "gallery/g14/opt/m1-thumb.webp"
+      },
+      {
+        "src": "gallery/g14/2.mp4",
+        "kind": "video",
+        "width": 1920,
+        "height": 1080,
+        "wide": "gallery/g14/opt/m2-960.mp4",
+        "wideW": 960,
+        "narrow": "gallery/g14/opt/m2-640.mp4",
+        "narrowW": 640,
+        "poster": "gallery/g14/opt/m2-poster.webp",
+        "thumb": "gallery/g14/opt/m2-thumb.webp"
+      }
+    ]
   },
   {
     "title": "",
@@ -150,7 +355,31 @@ window.galleryItems = [
     "media": [
       "gallery/g15/1.mp4"
     ],
-    "hidePreview": true
+    "hidePreview": true,
+    "previewAsset": {
+      "src": "gallery/g15/preview.gif",
+      "kind": "video",
+      "width": 400,
+      "height": 225,
+      "wide": "gallery/g15/opt/preview-400.mp4",
+      "wideW": 400,
+      "poster": "gallery/g15/opt/preview-poster.webp",
+      "thumb": "gallery/g15/opt/preview-thumb.webp"
+    },
+    "mediaAssets": [
+      {
+        "src": "gallery/g15/1.mp4",
+        "kind": "video",
+        "width": 1920,
+        "height": 1080,
+        "wide": "gallery/g15/opt/m1-960.mp4",
+        "wideW": 960,
+        "narrow": "gallery/g15/opt/m1-640.mp4",
+        "narrowW": 640,
+        "poster": "gallery/g15/opt/m1-poster.webp",
+        "thumb": "gallery/g15/opt/m1-thumb.webp"
+      }
+    ]
   },
   {
     "title": "",
@@ -164,7 +393,42 @@ window.galleryItems = [
       "gallery/g16/1.jpg",
       "gallery/g16/2.jpg"
     ],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g16/preview.png",
+      "kind": "image",
+      "width": 1933,
+      "height": 986,
+      "wide": "gallery/g16/opt/preview-960.webp",
+      "wideW": 960,
+      "narrow": "gallery/g16/opt/preview-640.webp",
+      "narrowW": 640,
+      "thumb": "gallery/g16/opt/preview-thumb.webp"
+    },
+    "mediaAssets": [
+      {
+        "src": "gallery/g16/1.jpg",
+        "kind": "image",
+        "width": 1167,
+        "height": 1120,
+        "wide": "gallery/g16/opt/m1-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g16/opt/m1-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g16/opt/m1-thumb.webp"
+      },
+      {
+        "src": "gallery/g16/2.jpg",
+        "kind": "image",
+        "width": 1090,
+        "height": 836,
+        "wide": "gallery/g16/opt/m2-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g16/opt/m2-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g16/opt/m2-thumb.webp"
+      }
+    ]
   },
   {
     "title": "",
@@ -178,6 +442,43 @@ window.galleryItems = [
       "gallery/g18/1.jpg",
       "gallery/g18/2.mp4"
     ],
-    "hidePreview": false
+    "hidePreview": false,
+    "previewAsset": {
+      "src": "gallery/g18/preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "wide": "gallery/g18/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g18/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g18/opt/preview-poster.webp",
+      "thumb": "gallery/g18/opt/preview-thumb.webp"
+    },
+    "mediaAssets": [
+      {
+        "src": "gallery/g18/1.jpg",
+        "kind": "image",
+        "width": 1280,
+        "height": 839,
+        "wide": "gallery/g18/opt/m1-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g18/opt/m1-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g18/opt/m1-thumb.webp"
+      },
+      {
+        "src": "gallery/g18/2.mp4",
+        "kind": "video",
+        "width": 1920,
+        "height": 1080,
+        "wide": "gallery/g18/opt/m2-960.mp4",
+        "wideW": 960,
+        "narrow": "gallery/g18/opt/m2-640.mp4",
+        "narrowW": 640,
+        "poster": "gallery/g18/opt/m2-poster.webp",
+        "thumb": "gallery/g18/opt/m2-thumb.webp"
+      }
+    ]
   }
 ];
