@@ -1008,15 +1008,26 @@ filters.forEach((button) => {
 /* ============================================================
    REVEAL
 
-   Cards rise into place the first time they are scrolled to.  Purely
+   Cards settle into place the first time they are scrolled to.  Purely
    decorative, and layered on top of a stylesheet whose default is
    "already visible": without the class the grid renders exactly as it
    would have, which is also what a reduced-motion visitor gets.
+
+   No per-card delay: a row arriving together is quieter than a cascade,
+   and it keeps the last card in a row from lagging behind the cursor.
    ============================================================ */
 
 (() => {
   if (!("IntersectionObserver" in window)) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // The huge top margin is what makes this safe against a jump.  A card the
+  // viewport skipped over - an anchor link, a flick, or scroll restoration on
+  // reload - never becomes "intersecting" again, and against a plain root it
+  // would sit at opacity 0 for good.  Growing the root upwards instead means
+  // anything the page has already passed counts as seen, while the bottom
+  // margin still holds back the cards that are genuinely below the fold.
+  const watch = { rootMargin: "100000px 0px -6% 0px", threshold: 0.04 };
 
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
@@ -1024,12 +1035,9 @@ filters.forEach((button) => {
       entry.target.classList.add("is-revealed");
       observer.unobserve(entry.target);
     }
-  }, { rootMargin: "0px 0px -6% 0px", threshold: 0.04 });
+  }, watch);
 
-  workElements.forEach((card, position) => {
-    // Staggered across a row rather than across the grid: a linear delay
-    // would leave the last card waiting well over a second.
-    card.style.setProperty("--reveal-delay", `${(position % 3) * 70}ms`);
+  workElements.forEach((card) => {
     card.classList.add("reveal");
     observer.observe(card);
   });
