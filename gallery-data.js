@@ -550,5 +550,30 @@ window.galleryItems = [
         "thumb": "gallery/g18/opt/m2-thumb.webp"
       }
     ]
+  },
+  {
+    "title": "Nebula",
+    "tags": [
+      "demo"
+    ],
+    "shortDescription": "",
+    "longDescription": "",
+    "preview": "gallery/g20/preview.mp4",
+    "fullsizePreview": "",
+    "media": [],
+    "previewAsset": {
+      "src": "gallery/g20/preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "wide": "gallery/g20/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g20/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g20/opt/preview-poster.webp",
+      "thumb": "gallery/g20/opt/preview-thumb.webp"
+    },
+    "fullsizeAsset": null,
+    "mediaAssets": []
   }
 ];
