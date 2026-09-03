@@ -67,36 +67,6 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g4/preview.mp4",
-    "fullsizePreview": "gallery/g4/fullsize_preview.webm",
-    "media": [],
-    "previewAsset": {
-      "src": "gallery/g4/preview.mp4",
-      "kind": "video",
-      "width": 320,
-      "height": 180,
-      "wide": "gallery/g4/opt/preview-320.mp4",
-      "wideW": 320,
-      "poster": "gallery/g4/opt/preview-poster.webp",
-      "thumb": "gallery/g4/opt/preview-thumb.webp"
-    },
-    "fullsizeAsset": {
-      "src": "gallery/g4/fullsize_preview.webm",
-      "kind": "video",
-      "width": 320,
-      "height": 180,
-      "poster": "gallery/g4/opt/fullsize-poster.webp",
-      "thumb": "gallery/g4/opt/fullsize-thumb.webp"
-    },
-    "mediaAssets": []
-  },
-  {
-    "title": "",
-    "tags": [
-      "art"
-    ],
-    "shortDescription": "",
-    "longDescription": "",
     "preview": "gallery/g5/preview.jpg",
     "fullsizePreview": "",
     "media": [],
@@ -112,6 +82,36 @@ window.galleryItems = [
       "thumb": "gallery/g5/opt/preview-thumb.webp"
     },
     "fullsizeAsset": null,
+    "mediaAssets": []
+  },
+  {
+    "title": "",
+    "tags": [
+      "art"
+    ],
+    "shortDescription": "",
+    "longDescription": "",
+    "preview": "gallery/g6/preview.mp4",
+    "fullsizePreview": "gallery/g6/fullsize_preview.webm",
+    "media": [],
+    "previewAsset": {
+      "src": "gallery/g6/preview.mp4",
+      "kind": "video",
+      "width": 320,
+      "height": 180,
+      "wide": "gallery/g6/opt/preview-320.mp4",
+      "wideW": 320,
+      "poster": "gallery/g6/opt/preview-poster.webp",
+      "thumb": "gallery/g6/opt/preview-thumb.webp"
+    },
+    "fullsizeAsset": {
+      "src": "gallery/g6/fullsize_preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 180,
+      "poster": "gallery/g6/opt/fullsize-poster.webp",
+      "thumb": "gallery/g6/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
