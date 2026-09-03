@@ -37,11 +37,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g3/preview.mp4",
+    "preview": "gallery/g3/preview.webm",
     "fullsizePreview": "gallery/g3/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g3/preview.mp4",
+      "src": "gallery/g3/preview.webm",
       "kind": "video",
       "width": 320,
       "height": 268,
@@ -559,7 +559,7 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g20/preview.mp4",
-    "fullsizePreview": "",
+    "fullsizePreview": "gallery/g20/fullsize_preview.mp4",
     "media": [],
     "previewAsset": {
       "src": "gallery/g20/preview.mp4",
@@ -573,7 +573,14 @@ window.galleryItems = [
       "poster": "gallery/g20/opt/preview-poster.webp",
       "thumb": "gallery/g20/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g20/fullsize_preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "poster": "gallery/g20/opt/fullsize-poster.webp",
+      "thumb": "gallery/g20/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   }
 ];
