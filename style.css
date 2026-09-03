@@ -410,20 +410,20 @@ header{
   min-width:84px;
   padding:6px 14px 3px;
   background:var(--stone-face);
-  color:var(--engrave);
+  color:var(--bone);
   box-shadow:var(--stone-raised);
   font:800 17px/1 var(--font-display);
   letter-spacing:.08em;
   text-transform:uppercase;
-  text-shadow:1px 1px 0 var(--engrave-lit);
+  text-shadow:1px 1px 0 #000,2px 2px 0 #000;
   transition:none;
 }
 .filter:hover{background:#33333a}
 .filter:active,.filter.active{
   padding:7px 13px 2px 15px;
-  background:var(--stone-sunken-face,#1b1f1c);
-  color:var(--bone);
-  text-shadow:1px 1px 0 #000;
+  background:var(--bone);
+  color:#000;
+  text-shadow:none;
   box-shadow:var(--stone-sunken);
 }
 
@@ -532,8 +532,8 @@ header{
   border:2px solid var(--bone);
   background:#000;
   color:var(--bone);
-  padding:2px 8px 0;
-  font:15px/1.2 var(--font-ui);
+  padding:3px 8px 3px;
+  font:15px/1 var(--font-ui);
   text-transform:uppercase;
   letter-spacing:.08em;
   text-shadow:1px 1px 0 #000;
@@ -581,24 +581,33 @@ header{
 
 footer{
   display:flex;
-  gap:4px;
-  margin:64px 0 0;
-  padding:4px 3px 3px;
-  border-top:1px solid #000;
-  box-shadow:inset 0 1px 0 var(--hi2);
-  color:var(--ash);
-  font:17px/1 var(--font-mono);
-}
-footer span{
-  display:flex;
   align-items:center;
-  gap:8px;
-  padding:4px 10px 3px;
-  box-shadow:inset 1px 1px 0 var(--lo),inset -1px -1px 0 var(--hi);
+  justify-content:space-between;
+  gap:16px;
+  margin:64px -4px -4px;
+  padding:12px 16px;
+  background:#000;
+  border-top:1px solid #000;
+  box-shadow:inset 0 1px 0 #1a1a1e;
+  color:#4a4a52;
+  font:16px/1 var(--font-mono);
 }
-footer span:first-child{flex:1}
-footer span:first-child::before{content:"";width:12px;height:11px;background:var(--px-skull) 0 0/12px 11px no-repeat;opacity:.7}
-footer span:last-child::before{content:"";width:10px;height:9px;background:var(--px-goblet) 0 0/10px 9px no-repeat;opacity:.7}
+footer span{display:flex;align-items:center;gap:8px}
+footer span::before{content:"";width:12px;height:11px;background:var(--px-skull) 0 0/12px 11px no-repeat;opacity:.35}
+.to-top{
+  display:inline-block;
+  padding:7px 16px 4px;
+  background:var(--stone-face);
+  border:1px solid #000;
+  box-shadow:var(--stone-raised);
+  color:var(--bone);
+  font:800 16px/1 var(--font-display);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-shadow:1px 1px 0 #000,2px 2px 0 #000;
+}
+.to-top:hover{background:#33333a}
+.to-top:active{box-shadow:var(--stone-sunken);background:var(--bone);color:#000;text-shadow:none}
 
 
 /* ============================================================
@@ -650,8 +659,7 @@ footer span:last-child::before{content:"";width:10px;height:9px;background:var(-
     linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 var(--xp-edge);
 }
-.gallery-kicker{color:#9a9aa6;font:15px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em}
-.gallery-header h2{margin:2px 0 0;font:600 21px/1.1 var(--font-display);letter-spacing:.02em;text-shadow:2px 2px 0 #000}
+.gallery-header h2{margin:0;font:600 21px/1.1 var(--font-display);letter-spacing:.02em;text-shadow:2px 2px 0 #000}
 .gallery-header-actions{display:flex;align-items:center;gap:10px}
 .gallery-counter{
   min-width:64px;
@@ -712,11 +720,11 @@ footer span:last-child::before{content:"";width:10px;height:9px;background:var(-
   padding:8px 0 5px;
   background:var(--stone-face);
   box-shadow:var(--stone-raised);
-  color:var(--engrave);
+  color:var(--bone);
   font:800 17px/1 var(--font-display);
   letter-spacing:.08em;
   text-transform:uppercase;
-  text-shadow:1px 1px 0 var(--engrave-lit);
+  text-shadow:1px 1px 0 #000,2px 2px 0 #000;
   text-align:center;
   transition:none;
 }
@@ -790,7 +798,7 @@ body.gallery-modal-open{overflow:hidden}
   .skills ul{columns:1}
   .works{grid-template-columns:1fr;gap:38px;padding:6px 2px}
   .work{--tilt:0deg!important}
-  footer{margin-top:44px;flex-direction:column}
+  footer{margin:44px -4px -4px;flex-direction:column;align-items:flex-start}
   .gallery-modal{padding:8px}
   .gallery-dialog{height:calc(100vh - 16px);padding:6px}
   .gallery-header{margin:0 -9px 6px}

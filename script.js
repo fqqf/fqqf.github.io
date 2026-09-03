@@ -678,7 +678,6 @@ function createViewer() {
     <section class="gallery-dialog" role="dialog" aria-modal="true" aria-label="Archive item">
       <header class="gallery-header">
         <div>
-          <div class="gallery-kicker">Archive item</div>
           <h2 id="gallery-viewer-title"></h2>
         </div>
 
