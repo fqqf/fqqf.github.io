@@ -650,7 +650,7 @@ footer span::before{content:"";width:12px;height:11px;background:var(--px-skull)
   justify-content:space-between;
   gap:20px;
   min-height:40px;
-  margin:0 -11px 8px;
+  margin:-8px -11px 8px;
   padding:6px 8px 6px 44px;
   border-radius:7px 7px 0 0;
   background:
@@ -801,7 +801,7 @@ body.gallery-modal-open{overflow:hidden}
   footer{margin:44px -4px -4px;flex-direction:column;align-items:flex-start}
   .gallery-modal{padding:8px}
   .gallery-dialog{height:calc(100vh - 16px);padding:6px}
-  .gallery-header{margin:0 -9px 6px}
+  .gallery-header{margin:-6px -9px 6px}
   .gallery-controls{grid-template-columns:72px 1fr 72px}
   .gallery-header-actions{gap:8px}
 }
