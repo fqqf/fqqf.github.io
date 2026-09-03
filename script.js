@@ -98,6 +98,8 @@ function resolveAsset(asset, fallbackSrc) {
       tiers: src ? [{ url: src, width: Infinity }] : [],
       poster: "",
       thumb: src,
+      naturalWidth: 0,
+      naturalHeight: 0,
     };
   }
 
@@ -113,6 +115,10 @@ function resolveAsset(asset, fallbackSrc) {
     tiers,
     poster: asset.poster || "",
     thumb: asset.thumb || asset.src || fallbackSrc || "",
+    // Pixel size of the original, straight from ffprobe.  The modal sizes
+    // itself off this; 0 means "unknown", and the modal keeps its default box.
+    naturalWidth: Number(asset.width) || 0,
+    naturalHeight: Number(asset.height) || 0,
   };
 }
 
@@ -161,6 +167,30 @@ function viewerAssetsFor(item) {
     entries[0] = resolveAsset(item.fullsizeAsset, item.fullsizePreview);
   }
   return entries;
+}
+
+/** Natural size of a resolved asset, or null when the data does not say. */
+function naturalSize(asset) {
+  const width = asset.naturalWidth || 0;
+  const height = asset.naturalHeight || 0;
+  return width && height ? { width, height } : null;
+}
+
+/**
+ * The box that has to hold every entry of one item.  Taken per item rather
+ * than per entry so that stepping through the strip never resizes the modal
+ * under the cursor.  Null when nothing in the item has known dimensions.
+ */
+function itemSize(entries) {
+  let width = 0;
+  let height = 0;
+  entries.forEach((asset) => {
+    const size = naturalSize(asset);
+    if (!size) return;
+    width = Math.max(width, size.width);
+    height = Math.max(height, size.height);
+  });
+  return width && height ? { width, height } : null;
 }
 
 
@@ -608,7 +638,19 @@ function createThumbnail(asset, className, label) {
 
    The modal shows originals at full quality - that is the whole point of
    opening it.  The grid behind it is parked meanwhile.
+
+   "Full quality" also means never blowing an original up: a 320x230 clip
+   stretched across an 1180x860 dialog is a blurry clip in a big black frame.
+   Items that fit inside SMALL_MEDIA_BOX get a dialog cut down to their own
+   pixels instead, and no visual is ever scaled past its native size.
    ============================================================ */
+
+// An item counts as small when both of its dimensions stay under this.
+const SMALL_MEDIA_BOX = 900;
+// Floors for the shrunken dialog: below these the header, the description and
+// the thumbnail strip stop being readable, which costs more than the black bars.
+const MIN_DIALOG_WIDTH = 520;
+const MIN_STAGE_HEIGHT = 240;
 
 function renderRichText(target, text) {
   const isUrl = /^https?:\/\/[^\s]+$/;
@@ -659,6 +701,7 @@ function createViewer() {
   `;
   document.body.appendChild(modal);
 
+  const dialog = modal.querySelector(".gallery-dialog");
   const stage = modal.querySelector(".gallery-stage");
   const heading = modal.querySelector("h2");
   const longDescription = modal.querySelector(".gallery-long-description");
@@ -669,6 +712,33 @@ function createViewer() {
   let entries = [];
   let index = 0;
   let opener = null;
+
+  /**
+   * Size the dialog around a small item.
+   *
+   * The chrome - header, stage margins, description, strip, padding - is
+   * measured off the default layout rather than hardcoded, so it follows the
+   * stylesheet and whether this item ships a long description.  The result is
+   * clamped with min() so a shrunken dialog still cannot outgrow the viewport,
+   * and styles are cleared first, which both restores the stylesheet defaults
+   * for a normal item and makes the measurement read those defaults.
+   */
+  function fitDialog(size) {
+    dialog.style.width = "";
+    dialog.style.height = "";
+    if (!size || size.width >= SMALL_MEDIA_BOX || size.height >= SMALL_MEDIA_BOX) return;
+
+    // offset* rather than getBoundingClientRect(): the closed dialog carries a
+    // scale() transform, which the rect would fold into the numbers.
+    const chromeWidth = dialog.offsetWidth - stage.offsetWidth;
+    const chromeHeight = dialog.offsetHeight - stage.offsetHeight;
+    if (chromeWidth <= 0 || chromeHeight <= 0) return;  // not laid out yet
+
+    const width = Math.max(MIN_DIALOG_WIDTH, size.width + chromeWidth);
+    const height = Math.max(MIN_STAGE_HEIGHT, size.height) + chromeHeight;
+    dialog.style.width = `min(${Math.round(width)}px, 100%)`;
+    dialog.style.height = `min(${Math.round(height)}px, calc(100vh - 44px))`;
+  }
 
   function showAt(next) {
     if (!entries.length) return;
@@ -693,6 +763,15 @@ function createViewer() {
       visual.decoding = "async";
     }
     visual.className = "gallery-visual";
+
+    // The stage stretches its child to fill; these caps stop that at the
+    // original's own pixels, and auto margins re-centre the shortfall.
+    const size = naturalSize(asset);
+    if (size) {
+      visual.style.maxWidth = `${size.width}px`;
+      visual.style.maxHeight = `${size.height}px`;
+      visual.style.margin = "auto";
+    }
 
     stage.replaceChildren(visual);
 
@@ -758,6 +837,10 @@ function createViewer() {
       });
       strip.replaceChildren(fragment);
       controls.classList.toggle("is-single", entries.length === 1);
+
+      // After the description and the strip are in place, so the measurement
+      // sees the chrome this item actually renders.
+      fitDialog(itemSize(entries));
 
       // Free the CPU and the decoders for the full-size original.
       scheduler.suspend("modal", { release: true });
