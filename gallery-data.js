@@ -7,11 +7,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g2/preview.webm",
-    "fullsizePreview": "",
+    "preview": "gallery/g2/preview.mp4",
+    "fullsizePreview": "gallery/g2/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g2/preview.webm",
+      "src": "gallery/g2/preview.mp4",
       "kind": "video",
       "width": 320,
       "height": 230,
@@ -20,7 +20,14 @@ window.galleryItems = [
       "poster": "gallery/g2/opt/preview-poster.webp",
       "thumb": "gallery/g2/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g2/fullsize_preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 230,
+      "poster": "gallery/g2/opt/fullsize-poster.webp",
+      "thumb": "gallery/g2/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
@@ -30,11 +37,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g3/preview.webm",
-    "fullsizePreview": "",
+    "preview": "gallery/g3/preview.mp4",
+    "fullsizePreview": "gallery/g3/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g3/preview.webm",
+      "src": "gallery/g3/preview.mp4",
       "kind": "video",
       "width": 320,
       "height": 268,
@@ -43,7 +50,14 @@ window.galleryItems = [
       "poster": "gallery/g3/opt/preview-poster.webp",
       "thumb": "gallery/g3/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g3/fullsize_preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 268,
+      "poster": "gallery/g3/opt/fullsize-poster.webp",
+      "thumb": "gallery/g3/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
@@ -53,11 +67,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g4/preview.webm",
-    "fullsizePreview": "",
+    "preview": "gallery/g4/preview.mp4",
+    "fullsizePreview": "gallery/g4/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g4/preview.webm",
+      "src": "gallery/g4/preview.mp4",
       "kind": "video",
       "width": 320,
       "height": 180,
@@ -66,7 +80,14 @@ window.galleryItems = [
       "poster": "gallery/g4/opt/preview-poster.webp",
       "thumb": "gallery/g4/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g4/fullsize_preview.webm",
+      "kind": "video",
+      "width": 320,
+      "height": 180,
+      "poster": "gallery/g4/opt/fullsize-poster.webp",
+      "thumb": "gallery/g4/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
@@ -100,11 +121,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
-    "preview": "gallery/g7/preview.webm",
-    "fullsizePreview": "",
+    "preview": "gallery/g7/preview.mp4",
+    "fullsizePreview": "gallery/g7/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g7/preview.webm",
+      "src": "gallery/g7/preview.mp4",
       "kind": "video",
       "width": 1632,
       "height": 948,
@@ -115,7 +136,14 @@ window.galleryItems = [
       "poster": "gallery/g7/opt/preview-poster.webp",
       "thumb": "gallery/g7/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g7/fullsize_preview.webm",
+      "kind": "video",
+      "width": 1632,
+      "height": 948,
+      "poster": "gallery/g7/opt/fullsize-poster.webp",
+      "thumb": "gallery/g7/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
@@ -173,11 +201,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Logo animation for MART in 2017",
     "longDescription": "Logo animation for MART in 2017\nMy first paid vector animation\n\nLooking back i completely dislike how it turned out, i could've done it way better.",
-    "preview": "gallery/g10/preview.webm",
-    "fullsizePreview": "",
+    "preview": "gallery/g10/preview.mp4",
+    "fullsizePreview": "gallery/g10/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g10/preview.webm",
+      "src": "gallery/g10/preview.mp4",
       "kind": "video",
       "width": 1168,
       "height": 800,
@@ -188,7 +216,14 @@ window.galleryItems = [
       "poster": "gallery/g10/opt/preview-poster.webp",
       "thumb": "gallery/g10/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g10/fullsize_preview.webm",
+      "kind": "video",
+      "width": 1168,
+      "height": 800,
+      "poster": "gallery/g10/opt/fullsize-poster.webp",
+      "thumb": "gallery/g10/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
@@ -223,7 +258,7 @@ window.galleryItems = [
     "shortDescription": "Short platformer in white-black tones",
     "longDescription": "Short platformer in white-black tones\n\nMade in 2021 with uheartbeast\n\nSource: https://icx.itch.io/melancholy-fight",
     "preview": "gallery/g12/preview.mp4",
-    "fullsizePreview": "",
+    "fullsizePreview": "gallery/g12/fullsize_preview.mp4",
     "media": [],
     "previewAsset": {
       "src": "gallery/g12/preview.mp4",
@@ -237,7 +272,14 @@ window.galleryItems = [
       "poster": "gallery/g12/opt/preview-poster.webp",
       "thumb": "gallery/g12/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g12/fullsize_preview.mp4",
+      "kind": "video",
+      "width": 1272,
+      "height": 712,
+      "poster": "gallery/g12/opt/fullsize-poster.webp",
+      "thumb": "gallery/g12/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   },
   {
@@ -248,7 +290,7 @@ window.galleryItems = [
     "shortDescription": "2D runner with platforming. Defeat and tame monsters, find new locations",
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
     "preview": "gallery/g13/preview.mp4",
-    "fullsizePreview": "",
+    "fullsizePreview": "gallery/g13/fullsize_preview.mp4",
     "media": [
       "gallery/g13/2.jpg",
       "gallery/g13/3.jpg",
@@ -266,7 +308,14 @@ window.galleryItems = [
       "poster": "gallery/g13/opt/preview-poster.webp",
       "thumb": "gallery/g13/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g13/fullsize_preview.mp4",
+      "kind": "video",
+      "width": 1392,
+      "height": 592,
+      "poster": "gallery/g13/opt/fullsize-poster.webp",
+      "thumb": "gallery/g13/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": [
       {
         "src": "gallery/g13/2.jpg",
@@ -310,14 +359,14 @@ window.galleryItems = [
     ],
     "shortDescription": "World exploration multiplayer game based on DCC by Matt Dinniman",
     "longDescription": "World exploration multiplayer game based on DCC by Matt Dinniman\n\nIn development right now, looking for 2nd artist for this project.\n2026",
-    "preview": "gallery/g14/preview.webm",
-    "fullsizePreview": "",
+    "preview": "gallery/g14/preview.mp4",
+    "fullsizePreview": "gallery/g14/fullsize_preview.webm",
     "media": [
       "gallery/g14/1.webm",
       "gallery/g14/2.mp4"
     ],
     "previewAsset": {
-      "src": "gallery/g14/preview.webm",
+      "src": "gallery/g14/preview.mp4",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -328,7 +377,14 @@ window.galleryItems = [
       "poster": "gallery/g14/opt/preview-poster.webp",
       "thumb": "gallery/g14/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g14/fullsize_preview.webm",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "poster": "gallery/g14/opt/fullsize-poster.webp",
+      "thumb": "gallery/g14/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": [
       {
         "src": "gallery/g14/1.webm",
@@ -363,14 +419,14 @@ window.galleryItems = [
     ],
     "shortDescription": "Snippet of a game for Godot Wild Jam #51",
     "longDescription": "",
-    "preview": "gallery/g15/preview.gif",
+    "preview": "gallery/g15/preview.mp4",
     "fullsizePreview": "gallery/g15/fullsize_preview.mp4",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g15/preview.gif",
+      "src": "gallery/g15/preview.mp4",
       "kind": "video",
       "width": 400,
-      "height": 225,
+      "height": 224,
       "wide": "gallery/g15/opt/preview-400.mp4",
       "wideW": 400,
       "poster": "gallery/g15/opt/preview-poster.webp",
@@ -444,7 +500,7 @@ window.galleryItems = [
     "shortDescription": "Demo of rimworld-like game made to test AI for Drumir",
     "longDescription": "Demo of rimworld-like game made to test AI for Drumir\n\nClosed source.",
     "preview": "gallery/g18/preview.mp4",
-    "fullsizePreview": "",
+    "fullsizePreview": "gallery/g18/fullsize_preview.mp4",
     "media": [
       "gallery/g18/1.jpg",
       "gallery/g18/2.mp4"
@@ -461,7 +517,14 @@ window.galleryItems = [
       "poster": "gallery/g18/opt/preview-poster.webp",
       "thumb": "gallery/g18/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g18/fullsize_preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "poster": "gallery/g18/opt/fullsize-poster.webp",
+      "thumb": "gallery/g18/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": [
       {
         "src": "gallery/g18/1.jpg",

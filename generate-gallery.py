@@ -15,7 +15,7 @@ Usage:
     python generate-gallery.py --no-media     # data only, skip ffmpeg
     python generate-gallery.py --force        # re-encode everything
     python generate-gallery.py --fps 0        # keep the source frame rate
-    python generate-gallery.py --max-seconds 12   # trim long card previews
+    python generate-gallery.py --max-seconds 0    # keep card previews whole
     python generate-gallery.py --jobs 4       # parallel encodes
 """
 
@@ -57,7 +57,14 @@ TIER_NARROW = 640
 POSTER_WIDTH = 960
 THUMB_WIDTH = 192
 
-DEFAULT_FPS_CAP = 30
+# Grid previews are ambient loops ~480 CSS px wide, not something anyone
+# studies frame by frame.  Halving the frame rate halves the decode work and
+# halves the texture uploads into the compositor, and it is not visible here.
+DEFAULT_FPS_CAP = 15
+# Backstop for folders cut_previews.py has not been run over: a card loops,
+# so past a few seconds the proxy is bytes nobody ever sees.  The modal is
+# unaffected - it plays the original file, never a proxy.
+DEFAULT_MAX_SECONDS = 4
 VIDEO_CRF = {TIER_WIDE: 24, TIER_NARROW: 25}
 WEBP_QUALITY = 82
 POSTER_QUALITY = 78
@@ -506,9 +513,10 @@ def main() -> None:
     parser.add_argument("--fps", type=int, default=DEFAULT_FPS_CAP,
                         help="frame-rate cap for grid proxies, 0 keeps the source rate "
                              "(default: {})".format(DEFAULT_FPS_CAP))
-    parser.add_argument("--max-seconds", type=int, default=0,
-                        help="trim grid previews to this many seconds, 0 keeps them whole "
-                             "(default: 0; the only flag here that changes what a card shows)")
+    parser.add_argument("--max-seconds", type=int, default=DEFAULT_MAX_SECONDS,
+                        help="trim grid proxies to this many seconds, 0 keeps them whole "
+                             "(default: {}; the modal always opens the untrimmed original)"
+                             .format(DEFAULT_MAX_SECONDS))
     args = parser.parse_args()
 
     media_enabled = not args.no_media

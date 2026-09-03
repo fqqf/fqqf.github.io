@@ -3,26 +3,16 @@
 
    PERFORMANCE MODEL
 
-   The grid used to mount every preview as a full resolution <video> with
-   src set, autoplay on and a 500px preload margin, so a dozen 1080p60
-   clips were demuxing and decoding at the same time.  That is what made
-   scrolling stutter on weak hardware.
+   Grid cards paint a still poster first, attach a clip only inside a warm
+   band around the viewport, and play only while they are meaningfully on
+   screen.  Clips that drift out are released - decoder, buffer and GPU
+   texture all go away.  A fast flick parks playback until the scroll
+   settles, and the whole grid is parked while the viewer modal is open.
 
-   What happens now:
-
-     * cards paint a still poster first, so first paint costs no decode
-     * a clip is only attached (source added) inside the warm band
-     * a clip only plays while it is actually on screen
-     * clips that drift far off screen are released - the decoder, the
-       buffered data and the GPU texture all go away
-     * a fast flick parks playback until the scroll settles
-     * a frame governor lowers the concurrent playback cap on hardware
-       that cannot keep up, and raises it back when it can
-     * the grid is fully parked while the viewer modal is open
-
-   Card visuals are unchanged: what plays, plays; what is paused keeps
-   showing its current frame; what is released falls back to a poster of
-   its own first frame.
+   The heavy lifting happens before this file runs: cut_previews.py caps a
+   card preview at a few seconds and generate-gallery.py encodes it to a
+   small 15 fps H.264 proxy.  The originals are never served to the grid -
+   they are what the modal opens on click.
    ============================================================ */
 
 const worksContainer = document.getElementById("works");
@@ -37,46 +27,56 @@ const VIDEO_MIME = {
   mov: "video/quicktime",
 };
 
-const RENDER_BATCH_SIZE = 6;
+/**
+ * Cards loop their preview on their own.  Flip to false to make the grid a
+ * wall of still posters that only animate under the cursor - steady-state
+ * cost drops to zero, at the price of a motionless page at rest.
+ */
+const GRID_AUTOPLAY = true;
 
 // Attach sources this far outside the viewport, release beyond it.
-// Wide enough that a normal scroll never reaches an unfilled card.
-const WARM_MARGIN = "600px 0px";
+const WARM_MARGIN = "400px 0px";
+// A card has to be at least this visible to earn a playback slot.  Without
+// it a card peeking in by 5% competes with the one in the middle of the screen.
+const PLAY_THRESHOLD = 0.5;
 // Above this scroll speed (px per ms) playback is parked until the flick ends.
 const FAST_SCROLL = 1.1;
 const SCROLL_SETTLE = 140;
 // Hovered cards jump the queue so the thing under the cursor always animates.
 const HOVER_PRIORITY = 2;
-const HOVER_CYCLE_MS = 1200;
+const HOVER_CYCLE_MS = 2500;
+/**
+ * A looping preview reads as motion, not as detail, so there is no reason to
+ * pull the 2x tier for it: at 480 CSS px that would be 960x540 per frame
+ * instead of 640x360 - 2.25x the pixels to decode and composite.  Full
+ * resolution is what the modal is for.
+ */
+const MAX_GRID_DENSITY = 1.5;
 // Sort sentinel for a card the view observer has not reported on yet.
 const FAR_AWAY = Number.MAX_SAFE_INTEGER;
-
-const scheduleIdle = window.requestIdleCallback
-  ? (callback) => window.requestIdleCallback(callback, { timeout: 500 })
-  : (callback) => setTimeout(callback, 1);
 
 
 /* ============================================================
    DEVICE PROFILE
 
-   Picks the proxy tier and the starting playback budget.  Both are only
-   opening guesses - the frame governor below corrects the budget from
-   measured frame timing.
+   How many clips may run at once.  Deliberately small: a three column grid
+   shows about six cards, and playing all six was the load.  Three is more
+   than enough to read as a live page.
    ============================================================ */
 
 const device = (() => {
   const connection = navigator.connection || {};
-  const saveData = connection.saveData === true;
   const cores = navigator.hardwareConcurrency || 4;
   const memory = navigator.deviceMemory || 4;
-  const slowLink = /^([23]g|slow-2g)$/i.test(connection.effectiveType || "");
+  const thrifty = connection.saveData === true
+    || /^([23]g|slow-2g)$/i.test(connection.effectiveType || "");
 
-  let budget = 8;
-  if (cores <= 2 || memory <= 2) budget = 2;
-  else if (cores <= 4 || memory <= 4) budget = 4;
-  if (saveData || slowLink) budget = 1;
+  let cap = 3;
+  if (cores <= 2 || memory <= 2) cap = 1;
+  else if (cores <= 4 || memory <= 4) cap = 2;
+  if (thrifty) cap = 1;
 
-  return { saveData, thrifty: saveData || slowLink, budget };
+  return { thrifty, cap };
 })();
 
 
@@ -98,8 +98,6 @@ function resolveAsset(asset, fallbackSrc) {
       tiers: src ? [{ url: src, width: Infinity }] : [],
       poster: "",
       thumb: src,
-      width: 0,
-      height: 0,
     };
   }
 
@@ -115,8 +113,6 @@ function resolveAsset(asset, fallbackSrc) {
     tiers,
     poster: asset.poster || "",
     thumb: asset.thumb || asset.src || fallbackSrc || "",
-    width: asset.width || 0,
-    height: asset.height || 0,
   };
 }
 
@@ -129,12 +125,14 @@ function resolveAsset(asset, fallbackSrc) {
  * width covers every layout - three up, two up or single column - for free.
  */
 function tierFor(asset, cssWidth) {
-  const tiers = asset.tiers || [];
-  if (!tiers.length) return asset.src || "";
+  const tiers = asset.tiers;
+  if (!tiers.length) return asset.src;
   if (device.thrifty) return tiers[0].url;
 
-  const needed = (cssWidth || 0) * (window.devicePixelRatio || 1);
-  if (!needed) return tiers[tiers.length - 1].url;
+  const density = Math.min(window.devicePixelRatio || 1, MAX_GRID_DENSITY);
+  const needed = (cssWidth || 0) * density;
+  // Not measured yet: start small rather than committing to the heavy tier.
+  if (!needed) return tiers[0].url;
 
   // 8% slack, so a 645px need does not jump a whole tier for nothing.
   const fit = tiers.find((tier) => tier.width >= needed * 0.92);
@@ -153,8 +151,8 @@ function assetsFor(item) {
 
 /**
  * Same list the modal walks, except slot 0 is the full size cut when the
- * folder ships one (fullsize_preview.*).  That way a card can loop a small,
- * cheap preview while opening it still lands on the real thing - and the
+ * folder ships one (fullsize_preview.*).  That way a card loops a short,
+ * cheap preview while opening it still lands on the whole thing - and the
  * heavy cut never shows up as an extra entry anywhere.
  */
 function viewerAssetsFor(item) {
@@ -219,97 +217,6 @@ function startVideo(video) {
 
 
 /* ============================================================
-   FRAME GOVERNOR
-
-   Samples requestAnimationFrame deltas while clips are playing and
-   nudges the concurrent playback cap toward whatever this machine can
-   actually sustain.  Sampling only runs while something is playing, and
-   pauses during scroll parking so a scroll stall is never blamed on the
-   decoders.
-   ============================================================ */
-
-const governor = (() => {
-  const MIN_CAP = 1;
-  const MAX_CAP = 12;
-  const WINDOW = 48;         // frames per verdict
-  const SLOW_FRAME = 24;     // ms; roughly below 42fps
-  const BAD_RATIO = 0.24;    // shrink above this share of slow frames
-  const GOOD_RATIO = 0.05;   // grow below it, after enough clean windows
-  const GROW_AFTER = 3;      // consecutive clean windows before growing
-
-  let cap = device.budget;
-  let frames = 0;
-  let slow = 0;
-  let cleanWindows = 0;
-  let last = 0;
-  let handle = 0;
-  let active = false;
-  let onChange = () => {};
-
-  function sample(now) {
-    handle = 0;
-    if (!active) return;
-    if (last) {
-      const delta = now - last;
-      // Ignore the huge deltas that follow a tab switch or a long task
-      // outside our control; they are not a decode capacity signal.
-      if (delta < 500) {
-        frames += 1;
-        if (delta > SLOW_FRAME) slow += 1;
-      }
-    }
-    last = now;
-
-    if (frames >= WINDOW) {
-      const ratio = slow / frames;
-      frames = 0;
-      slow = 0;
-
-      if (ratio > BAD_RATIO && cap > MIN_CAP) {
-        cap -= 1;
-        cleanWindows = 0;
-        onChange();
-      } else if (ratio < GOOD_RATIO) {
-        cleanWindows += 1;
-        if (cleanWindows >= GROW_AFTER && cap < MAX_CAP) {
-          cap += 1;
-          cleanWindows = 0;
-          onChange();
-        }
-      } else {
-        cleanWindows = 0;
-      }
-    }
-
-    handle = requestAnimationFrame(sample);
-  }
-
-  return {
-    get cap() {
-      return cap;
-    },
-    set onChange(callback) {
-      onChange = callback;
-    },
-    /** Called with the number of clips currently playing. */
-    watch(playing) {
-      if (playing > 0 && !active) {
-        active = true;
-        last = 0;
-        frames = 0;
-        slow = 0;
-        if (!handle) handle = requestAnimationFrame(sample);
-      } else if (playing === 0 && active) {
-        active = false;
-        if (handle) cancelAnimationFrame(handle);
-        handle = 0;
-      }
-    },
-  };
-})();
-
-
-/* ============================================================
    PLAYBACK SCHEDULER
 
    Observes cards, not the video elements inside them: a card is a
@@ -322,10 +229,9 @@ const governor = (() => {
    ============================================================ */
 
 const scheduler = (() => {
-  const cards = new Map(); // element -> { controller, score, distance, warm, playing }
+  const cards = new Map(); // element -> { controller, score, distance, warm, playing, width }
   const suspended = new Set();
   let pendingReconcile = 0;
-  let playingCount = 0;
 
   const warmObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
@@ -357,7 +263,7 @@ const scheduler = (() => {
         : 0;
     }
     schedule();
-  }, { rootMargin: "0px", threshold: [0, 0.05, 0.25, 0.5, 0.75, 1] });
+  }, { rootMargin: "0px", threshold: [0, 0.25, 0.5, 0.75, 1] });
 
   function schedule() {
     if (pendingReconcile) return;
@@ -370,11 +276,9 @@ const scheduler = (() => {
   /** Hard stop. Never a diff against bookkeeping something else may have moved. */
   function parkAll() {
     for (const card of cards.values()) {
-      if (card.playing) playingCount -= 1;
       card.playing = false;
       card.controller.park();
     }
-    governor.watch(0);
   }
 
   function reconcile() {
@@ -385,7 +289,10 @@ const scheduler = (() => {
 
     const candidates = [];
     for (const card of cards.values()) {
-      if (!card.warm || card.score <= 0 || !card.controller.wantsPlayback()) {
+      // A hovered card plays even when barely in view: it is what the cursor
+      // is pointing at, and there is exactly one of it.
+      const visible = card.score >= PLAY_THRESHOLD || card.controller.priority > 0;
+      if (!card.warm || !visible || !card.controller.wantsPlayback()) {
         setPlaying(card, false);
         continue;
       }
@@ -397,23 +304,17 @@ const scheduler = (() => {
       return weight !== 0 ? weight : a.distance - b.distance;
     });
 
-    const cap = governor.cap;
     for (let index = 0; index < candidates.length; index += 1) {
-      setPlaying(candidates[index], index < cap);
+      setPlaying(candidates[index], index < device.cap);
     }
-
-    governor.watch(playingCount);
   }
 
   function setPlaying(card, next) {
     if (card.playing === next) return;
     card.playing = next;
-    playingCount += next ? 1 : -1;
     if (next) card.controller.play();
     else card.controller.pause();
   }
-
-  governor.onChange = schedule;
 
   return {
     register(element, controller) {
@@ -421,13 +322,23 @@ const scheduler = (() => {
       warmObserver.observe(element);
       viewObserver.observe(element);
     },
-    /** Park playback for a named reason; every reason must be lifted to resume. */
-    suspend(reason) {
+    /**
+     * Park playback for a named reason; every reason must be lifted to resume.
+     * With `release`, the cards hand their decoders back as well - worth it
+     * behind a modal, which covers the grid completely and wants a full-size
+     * decoder of its own (weak iGPUs cap concurrent hardware decoders, and
+     * losing that race drops the modal to software decoding).  Not worth it
+     * for a scroll flick, which would re-fetch everything the moment it ends.
+     */
+    suspend(reason, { release = false } = {}) {
       if (suspended.has(reason)) return;
       suspended.add(reason);
       // Synchronously, not on the next frame: the point of parking during a
       // flick is to be out of the way of that very frame.
       parkAll();
+      if (release) {
+        for (const card of cards.values()) card.controller.cool();
+      }
     },
     resume(reason) {
       if (!suspended.delete(reason)) return;
@@ -495,14 +406,16 @@ function createMedia(item) {
   let active = null;
   let warm = false;
   let running = false;
+  let hovered = false;
   let cycleTimer = 0;
   let cycleIndex = 0;
-  let priority = 0;
+  let paintHandle = 0;
   // Measured card width, handed over by the scheduler's observer entry.
   let boxWidth = 0;
 
   function build(asset) {
-    if (visuals.has(asset)) return visuals.get(asset);
+    const existing = visuals.get(asset);
+    if (existing) return existing;
 
     let element;
     if (asset.kind === "video") {
@@ -519,17 +432,18 @@ function createMedia(item) {
   }
 
   function warmVisual(element) {
-    const url = tierFor(element.asset, boxWidth);
-    if (!url) return;
-
     if (element instanceof HTMLVideoElement) {
       // Poster first: the card has something to show before a single frame
       // has been decoded, and again after the clip is released.
       if (element.dataset.poster && !element.poster) element.poster = element.dataset.poster;
-      attachSource(element, url);
-    } else if (element.getAttribute("src") !== url) {
-      element.src = url;
+      // Without grid autoplay a card stays a poster until the cursor arrives,
+      // so there is nothing to fetch or demux at rest.
+      if (!GRID_AUTOPLAY && !hovered) return;
+      attachSource(element, tierFor(element.asset, boxWidth));
+      return;
     }
+    const url = tierFor(element.asset, boxWidth);
+    if (url && element.getAttribute("src") !== url) element.src = url;
   }
 
   function coolVisual(element) {
@@ -537,57 +451,79 @@ function createMedia(item) {
     if (element instanceof HTMLVideoElement) detachSource(element);
   }
 
+  /**
+   * Reconcile every visual against `active` rather than toggling the two ends
+   * of a swap.  Deferred by a frame so a freshly appended element gets one
+   * paint at opacity 0 and the fade actually runs - but derived from the
+   * current truth, so two swaps inside one frame cannot strand the class on a
+   * hidden element, and a tab that comes back from the background repaints
+   * correctly on the first frame it gets.
+   */
+  function paint() {
+    paintHandle = 0;
+    for (const element of visuals.values()) {
+      element.classList.toggle("is-active", element === active);
+    }
+  }
+
+  /**
+   * Swap the visible visual.  Elements built for the hover cycle stay in the
+   * DOM once created - they are absolutely positioned at opacity 0, and
+   * rebuilding them every cycle cost a fresh request and a fresh decoder.
+   * Their sources are released together on mouseleave.
+   */
   function show(asset) {
     const next = build(asset);
-    if (next === active) {
-      if (running) startVideo(next);
-      return;
-    }
-
-    const previous = active;
-    active = next;
-
     if (next.parentNode !== container) container.appendChild(next);
     if (warm) warmVisual(next);
 
-    if (previous) previous.classList.remove("is-active");
-    requestAnimationFrame(() => next.classList.add("is-active"));
-
-    // Keep the preview element around; transient hover clips are disposable.
-    if (previous && previous !== primary) {
-      coolVisual(previous);
-      if (previous.parentNode === container) previous.remove();
-      visuals.delete(previous.asset);
+    if (next !== active) {
+      active = next;
+      if (!paintHandle) paintHandle = requestAnimationFrame(paint);
+      scheduler.refresh();
     }
 
     if (running) startVideo(next);
-    scheduler.refresh();
   }
 
   function stopCycle() {
-    if (!cycleTimer) return;
-    clearInterval(cycleTimer);
+    if (cycleTimer) clearInterval(cycleTimer);
     cycleTimer = 0;
+  }
+
+  function beginCycle() {
+    if (cycleTimer || !extras.length) return;
+    const step = () => {
+      show(extras[cycleIndex]);
+      cycleIndex = (cycleIndex + 1) % extras.length;
+    };
+    step();
+    cycleTimer = setInterval(step, HOVER_CYCLE_MS);
   }
 
   function restorePreview() {
     stopCycle();
     cycleIndex = 0;
     show(preview);
+    // The extras are only worth a decoder while the cursor is on the card.
+    for (const [asset, element] of visuals) {
+      if (asset !== preview) coolVisual(element);
+    }
   }
 
   const primary = build(preview);
-  primary.className = "is-active";
+  primary.classList.add("is-active");
   if (primary instanceof HTMLImageElement) primary.alt = item.title || "";
   container.appendChild(primary);
   active = primary;
 
   const controller = {
     get priority() {
-      return priority;
+      return hovered ? HOVER_PRIORITY : 0;
     },
     wantsPlayback() {
-      return active instanceof HTMLVideoElement;
+      if (!(active instanceof HTMLVideoElement)) return false;
+      return GRID_AUTOPLAY || hovered;
     },
     warm(width) {
       warm = true;
@@ -597,14 +533,15 @@ function createMedia(item) {
     cool() {
       warm = false;
       running = false;
+      hovered = false;
       stopCycle();
+      cycleIndex = 0;
       for (const element of visuals.values()) coolVisual(element);
-      if (active !== primary) restorePreview();
+      if (active !== primary) show(preview);
     },
     play() {
       running = true;
       if (active instanceof HTMLVideoElement) startVideo(active);
-      if (cycleTimer === 0 && priority > 0 && extras.length) beginCycle();
     },
     pause() {
       running = false;
@@ -623,28 +560,18 @@ function createMedia(item) {
     restorePreview,
   };
 
-  function beginCycle() {
-    const step = () => {
-      if (!extras.length) return;
-      show(extras[cycleIndex]);
-      cycleIndex = (cycleIndex + 1) % extras.length;
-    };
-    step();
-    cycleTimer = setInterval(step, HOVER_CYCLE_MS);
-  }
+  container.addEventListener("mouseenter", () => {
+    hovered = true;
+    if (warm) warmVisual(active);
+    beginCycle();
+    scheduler.refresh();
+  });
 
-  if (extras.length) {
-    container.addEventListener("mouseenter", () => {
-      priority = HOVER_PRIORITY;
-      scheduler.refresh();
-      if (!cycleTimer) beginCycle();
-    });
-    container.addEventListener("mouseleave", () => {
-      priority = 0;
-      restorePreview();
-      scheduler.refresh();
-    });
-  }
+  container.addEventListener("mouseleave", () => {
+    hovered = false;
+    restorePreview();
+    scheduler.refresh();
+  });
 
   container.controller = controller;
   return container;
@@ -654,10 +581,8 @@ function createMedia(item) {
 /* ============================================================
    THUMBNAILS
 
-   Previously each video thumbnail was a paused <video preload=metadata>
-   with its source already set - a network round trip and a demux per
-   strip entry, for something 58px wide.  They are stills now, generated
-   from the same first frame the paused element used to show.
+   Stills, generated from the same first frame a paused <video> used to
+   show.  A strip entry is 58px wide; it is not worth a demux.
    ============================================================ */
 
 function createThumbnail(asset, className, label) {
@@ -682,8 +607,7 @@ function createThumbnail(asset, className, label) {
    VIEWER MODAL
 
    The modal shows originals at full quality - that is the whole point of
-   opening it.  The grid behind it is parked meanwhile, so the backdrop
-   blur is not compositing a wall of live video.
+   opening it.  The grid behind it is parked meanwhile.
    ============================================================ */
 
 function renderRichText(target, text) {
@@ -835,8 +759,8 @@ function createViewer() {
       strip.replaceChildren(fragment);
       controls.classList.toggle("is-single", entries.length === 1);
 
-      // Free the CPU for the full-size original behind the blurred backdrop.
-      scheduler.suspend("modal");
+      // Free the CPU and the decoders for the full-size original.
+      scheduler.suspend("modal", { release: true });
 
       showAt(startIndex);
       modal.classList.add("is-open");
@@ -915,8 +839,7 @@ function createWork(item) {
 
   if (caption.children.length) card.appendChild(caption);
 
-  const assets = assetsFor(item);
-  const extras = assets.slice(1);
+  const extras = assetsFor(item).slice(1);
   if (extras.length) {
     const strip = document.createElement("div");
     strip.className = "item-mini-gallery";
@@ -951,56 +874,27 @@ function createWork(item) {
 
 /* ============================================================
    RENDER
+
+   One pass.  The cards are content-visibility:auto, so the ones below the
+   fold cost layout and paint nothing until they are scrolled to - there is
+   nothing left for a chunked render to spread out.
    ============================================================ */
 
-let renderedCount = 0;
-let renderQueue = [];
-let workElements = [];
-
-function renderGalleryChunk() {
-  if (renderedCount >= renderQueue.length) return;
-
-  const fragment = document.createDocumentFragment();
-  const end = Math.min(renderedCount + RENDER_BATCH_SIZE, renderQueue.length);
-  for (let index = renderedCount; index < end; index += 1) {
-    const card = createWork(renderQueue[index]);
-    workElements.push(card);
-    fragment.appendChild(card);
-  }
-  worksContainer.appendChild(fragment);
-  renderedCount = end;
-
-  if (renderedCount < renderQueue.length) scheduleIdle(renderGalleryChunk);
-}
-
-function renderGallery(items) {
-  renderedCount = 0;
-  renderQueue = items;
-  workElements = [];
-  worksContainer.replaceChildren();
-  renderGalleryChunk();
-}
-
-function renderFilters(items) {
-  const container = document.querySelector(".filters");
-  if (!container) return;
-
-  const tags = [...new Set(items.flatMap((item) => (Array.isArray(item.tags) ? item.tags : [])))];
-  const fragment = document.createDocumentFragment();
-  tags.forEach((tag) => {
-    const button = document.createElement("button");
-    button.className = "filter";
-    button.type = "button";
-    button.dataset.filter = tag;
-    button.textContent = tag;
-    fragment.appendChild(button);
-  });
-  container.appendChild(fragment);
-}
-
 const galleryItems = Array.isArray(window.galleryItems) ? window.galleryItems : [];
-renderFilters(galleryItems);
-renderGallery(galleryItems);
+
+const workElements = galleryItems.map(createWork);
+worksContainer.replaceChildren(...workElements);
+
+const filtersContainer = document.querySelector(".filters");
+const tagNames = [...new Set(galleryItems.flatMap((item) => (Array.isArray(item.tags) ? item.tags : [])))];
+filtersContainer.append(...tagNames.map((tag) => {
+  const button = document.createElement("button");
+  button.className = "filter";
+  button.type = "button";
+  button.dataset.filter = tag;
+  button.textContent = tag;
+  return button;
+}));
 
 const filters = [...document.querySelectorAll(".filter")];
 
@@ -1026,39 +920,3 @@ function update() {
 filters.forEach((button) => {
   button.addEventListener("click", () => toggle(button.dataset.filter));
 });
-
-
-/* ============================================================
-   CONTACT MODAL (only wires up if the markup is present)
-   ============================================================ */
-
-(() => {
-  const modal = document.getElementById("contact-modal");
-  const trigger = document.getElementById("contact-open");
-  if (!modal || !trigger) return;
-
-  let opener = null;
-  const close = () => {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("contact-modal-open");
-    if (opener) opener.focus();
-  };
-
-  trigger.addEventListener("click", () => {
-    opener = document.activeElement;
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("contact-modal-open");
-    const first = modal.querySelector(".contact-close");
-    if (first) first.focus();
-  });
-
-  modal.querySelectorAll("[data-contact-close]").forEach((element) => {
-    element.addEventListener("click", close);
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && modal.classList.contains("is-open")) close();
-  });
-})();
