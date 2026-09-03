@@ -1003,3 +1003,34 @@ function update() {
 filters.forEach((button) => {
   button.addEventListener("click", () => toggle(button.dataset.filter));
 });
+
+
+/* ============================================================
+   REVEAL
+
+   Cards rise into place the first time they are scrolled to.  Purely
+   decorative, and layered on top of a stylesheet whose default is
+   "already visible": without the class the grid renders exactly as it
+   would have, which is also what a reduced-motion visitor gets.
+   ============================================================ */
+
+(() => {
+  if (!("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add("is-revealed");
+      observer.unobserve(entry.target);
+    }
+  }, { rootMargin: "0px 0px -6% 0px", threshold: 0.04 });
+
+  workElements.forEach((card, position) => {
+    // Staggered across a row rather than across the grid: a linear delay
+    // would leave the last card waiting well over a second.
+    card.style.setProperty("--reveal-delay", `${(position % 3) * 70}ms`);
+    card.classList.add("reveal");
+    observer.observe(card);
+  });
+})();
