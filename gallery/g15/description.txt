@@ -1,3 +1,7 @@
 #game
 
-Snippet of a game for Godot Wild Jam #51
+Submission for Godot Wild Jam #51
+
+Submission for Godot Wild Jam #51
+
+Source: https://icx.itch.io/jira

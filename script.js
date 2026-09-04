@@ -16,7 +16,7 @@
    ============================================================ */
 
 const worksContainer = document.getElementById("works");
-const selected = new Set();
+let selected = null;
 
 const VIDEO_PATTERN = /\.(mp4|webm|ogg|mov|m4v)$/i;
 const VIDEO_MIME = {
@@ -861,9 +861,9 @@ const viewer = createViewer();
    ============================================================ */
 
 function toggle(tag) {
-  if (tag === "all") selected.clear();
-  else if (selected.has(tag)) selected.delete(tag);
-  else selected.add(tag);
+  // One tag at a time: clicking another tag replaces the selection,
+  // clicking the active one (or "all") clears it.
+  selected = tag === "all" || tag === selected ? null : tag;
   update();
 }
 
@@ -984,16 +984,16 @@ function update() {
   // Hidden cards stop intersecting, so the scheduler pauses them for free.
   workElements.forEach((card) => {
     const tags = card.dataset.tags.split(/\s+/).filter(Boolean);
-    card.classList.toggle("is-hidden", selected.size > 0 && !tags.some((tag) => selected.has(tag)));
+    card.classList.toggle("is-hidden", selected !== null && !tags.includes(selected));
   });
 
   filters.forEach((button) => {
     const filter = button.dataset.filter;
-    button.classList.toggle("active", filter === "all" ? selected.size === 0 : selected.has(filter));
+    button.classList.toggle("active", filter === "all" ? selected === null : filter === selected);
   });
 
   document.querySelectorAll(".tag").forEach((button) => {
-    button.classList.toggle("active", selected.has(button.dataset.tag));
+    button.classList.toggle("active", button.dataset.tag === selected);
   });
 
   scheduler.refresh();

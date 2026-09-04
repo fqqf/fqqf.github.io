@@ -356,8 +356,8 @@ window.galleryItems = [
     "tags": [
       "game"
     ],
-    "shortDescription": "Snippet of a game for Godot Wild Jam #51",
-    "longDescription": "",
+    "shortDescription": "Submission for Godot Wild Jam #51",
+    "longDescription": "Submission for Godot Wild Jam #51\n\nSource: https://icx.itch.io/jira",
     "preview": "gallery/g15/preview.webm",
     "fullsizePreview": "gallery/g15/fullsize_preview.webm",
     "media": [],
