@@ -66,7 +66,7 @@ window.galleryItems = [
       "art"
     ],
     "shortDescription": "",
-    "longDescription": "",
+    "longDescription": "My first drawing in Photoshop, made in 2017.",
     "preview": "gallery/g5/preview.jpg",
     "fullsizePreview": "",
     "media": [],
