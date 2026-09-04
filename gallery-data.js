@@ -60,11 +60,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
-    "preview": "gallery/g7/preview.webm",
+    "preview": "gallery/g7/preview.mp4",
     "fullsizePreview": "gallery/g7/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g7/preview.webm",
+      "src": "gallery/g7/preview.mp4",
       "kind": "video",
       "width": 1632,
       "height": 948,
