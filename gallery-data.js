@@ -38,7 +38,7 @@ window.galleryItems = [
     "shortDescription": "",
     "longDescription": "",
     "preview": "gallery/g3/preview.webm",
-    "fullsizePreview": "gallery/g3/fullsize_preview.webm",
+    "fullsizePreview": "",
     "media": [],
     "previewAsset": {
       "src": "gallery/g3/preview.webm",
@@ -50,68 +50,7 @@ window.galleryItems = [
       "poster": "gallery/g3/opt/preview-poster.webp",
       "thumb": "gallery/g3/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": {
-      "src": "gallery/g3/fullsize_preview.webm",
-      "kind": "video",
-      "width": 320,
-      "height": 268,
-      "poster": "gallery/g3/opt/fullsize-poster.webp",
-      "thumb": "gallery/g3/opt/fullsize-thumb.webp"
-    },
-    "mediaAssets": []
-  },
-  {
-    "title": "",
-    "tags": [
-      "art"
-    ],
-    "shortDescription": "",
-    "longDescription": "My first drawing in Photoshop, made in 2017.",
-    "preview": "gallery/g5/preview.jpg",
-    "fullsizePreview": "",
-    "media": [],
-    "previewAsset": {
-      "src": "gallery/g5/preview.jpg",
-      "kind": "image",
-      "width": 1270,
-      "height": 686,
-      "wide": "gallery/g5/opt/preview-960.webp",
-      "wideW": 960,
-      "narrow": "gallery/g5/opt/preview-640.webp",
-      "narrowW": 640,
-      "thumb": "gallery/g5/opt/preview-thumb.webp"
-    },
     "fullsizeAsset": null,
-    "mediaAssets": []
-  },
-  {
-    "title": "",
-    "tags": [
-      "art"
-    ],
-    "shortDescription": "",
-    "longDescription": "",
-    "preview": "gallery/g6/preview.webm",
-    "fullsizePreview": "gallery/g6/fullsize_preview.webm",
-    "media": [],
-    "previewAsset": {
-      "src": "gallery/g6/preview.webm",
-      "kind": "video",
-      "width": 320,
-      "height": 180,
-      "wide": "gallery/g6/opt/preview-320.mp4",
-      "wideW": 320,
-      "poster": "gallery/g6/opt/preview-poster.webp",
-      "thumb": "gallery/g6/opt/preview-thumb.webp"
-    },
-    "fullsizeAsset": {
-      "src": "gallery/g6/fullsize_preview.webm",
-      "kind": "video",
-      "width": 320,
-      "height": 180,
-      "poster": "gallery/g6/opt/fullsize-poster.webp",
-      "thumb": "gallery/g6/opt/fullsize-thumb.webp"
-    },
     "mediaAssets": []
   },
   {
@@ -289,7 +228,7 @@ window.galleryItems = [
     ],
     "shortDescription": "2D runner with platforming. Defeat and tame monsters, find new locations",
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
-    "preview": "gallery/g13/preview.webm",
+    "preview": "gallery/g13/preview.mp4",
     "fullsizePreview": "gallery/g13/fullsize_preview.mp4",
     "media": [
       "gallery/g13/2.jpg",
@@ -297,7 +236,7 @@ window.galleryItems = [
       "gallery/g13/4.jpg"
     ],
     "previewAsset": {
-      "src": "gallery/g13/preview.webm",
+      "src": "gallery/g13/preview.mp4",
       "kind": "video",
       "width": 1392,
       "height": 592,
@@ -589,12 +528,12 @@ window.galleryItems = [
       "demo"
     ],
     "shortDescription": "Oolite in Godot with multiplayer support",
-    "longDescription": "Made oolite in godot, with trading and stuff.\nSource code closed.",
-    "preview": "gallery/g21/preview.webm",
-    "fullsizePreview": "",
+    "longDescription": "Made oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
+    "preview": "gallery/g21/preview.mp4",
+    "fullsizePreview": "gallery/g21/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g21/preview.webm",
+      "src": "gallery/g21/preview.mp4",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -605,7 +544,14 @@ window.galleryItems = [
       "poster": "gallery/g21/opt/preview-poster.webp",
       "thumb": "gallery/g21/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": null,
+    "fullsizeAsset": {
+      "src": "gallery/g21/fullsize_preview.webm",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "poster": "gallery/g21/opt/fullsize-poster.webp",
+      "thumb": "gallery/g21/opt/fullsize-thumb.webp"
+    },
     "mediaAssets": []
   }
 ];

@@ -1,5 +1,7 @@
 #demo
 2D Oolite
 Oolite in Godot with multiplayer support
-Made oolite in godot, with trading and stuff.
+
+Made oolite in godot, with trading, stuff and multiplayer support over netfox.
+
 Source code closed.
