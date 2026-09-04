@@ -491,12 +491,13 @@ window.galleryItems = [
     ]
   },
   {
-    "title": "Nebula",
+    "title": "",
     "tags": [
+      "software",
       "demo"
     ],
-    "shortDescription": "",
-    "longDescription": "",
+    "shortDescription": "Scene engine for Drumir",
+    "longDescription": "Scene engine for Drumir (GDExtension C++)",
     "preview": "gallery/g20/preview.webm",
     "fullsizePreview": "gallery/g20/fullsize_preview.webm",
     "media": [],
