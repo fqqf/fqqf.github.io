@@ -7,11 +7,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g2/preview.mp4",
+    "preview": "gallery/g2/preview.webm",
     "fullsizePreview": "gallery/g2/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g2/preview.mp4",
+      "src": "gallery/g2/preview.webm",
       "kind": "video",
       "width": 320,
       "height": 230,
@@ -91,11 +91,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g6/preview.mp4",
+    "preview": "gallery/g6/preview.webm",
     "fullsizePreview": "gallery/g6/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g6/preview.mp4",
+      "src": "gallery/g6/preview.webm",
       "kind": "video",
       "width": 320,
       "height": 180,
@@ -121,11 +121,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
-    "preview": "gallery/g7/preview.mp4",
+    "preview": "gallery/g7/preview.webm",
     "fullsizePreview": "gallery/g7/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g7/preview.mp4",
+      "src": "gallery/g7/preview.webm",
       "kind": "video",
       "width": 1632,
       "height": 948,
@@ -201,11 +201,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Logo animation for MART in 2017",
     "longDescription": "Logo animation for MART in 2017\nMy first paid vector animation\n\nLooking back i completely dislike how it turned out, i could've done it way better.",
-    "preview": "gallery/g10/preview.mp4",
+    "preview": "gallery/g10/preview.webm",
     "fullsizePreview": "gallery/g10/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g10/preview.mp4",
+      "src": "gallery/g10/preview.webm",
       "kind": "video",
       "width": 1168,
       "height": 800,
@@ -257,11 +257,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Short platformer in white-black tones",
     "longDescription": "Short platformer in white-black tones\n\nMade in 2021 with uheartbeast\n\nSource: https://icx.itch.io/melancholy-fight",
-    "preview": "gallery/g12/preview.mp4",
+    "preview": "gallery/g12/preview.webm",
     "fullsizePreview": "gallery/g12/fullsize_preview.mp4",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g12/preview.mp4",
+      "src": "gallery/g12/preview.webm",
       "kind": "video",
       "width": 1272,
       "height": 712,
@@ -289,7 +289,7 @@ window.galleryItems = [
     ],
     "shortDescription": "2D runner with platforming. Defeat and tame monsters, find new locations",
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
-    "preview": "gallery/g13/preview.mp4",
+    "preview": "gallery/g13/preview.webm",
     "fullsizePreview": "gallery/g13/fullsize_preview.mp4",
     "media": [
       "gallery/g13/2.jpg",
@@ -297,7 +297,7 @@ window.galleryItems = [
       "gallery/g13/4.jpg"
     ],
     "previewAsset": {
-      "src": "gallery/g13/preview.mp4",
+      "src": "gallery/g13/preview.webm",
       "kind": "video",
       "width": 1392,
       "height": 592,
@@ -359,14 +359,14 @@ window.galleryItems = [
     ],
     "shortDescription": "World exploration multiplayer game based on DCC by Matt Dinniman",
     "longDescription": "World exploration multiplayer game based on DCC by Matt Dinniman\n\nIn development right now, looking for 2nd artist for this project.\n2026",
-    "preview": "gallery/g14/preview.mp4",
+    "preview": "gallery/g14/preview.webm",
     "fullsizePreview": "gallery/g14/fullsize_preview.webm",
     "media": [
       "gallery/g14/1.webm",
       "gallery/g14/2.mp4"
     ],
     "previewAsset": {
-      "src": "gallery/g14/preview.mp4",
+      "src": "gallery/g14/preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -419,11 +419,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Snippet of a game for Godot Wild Jam #51",
     "longDescription": "",
-    "preview": "gallery/g15/preview.mp4",
-    "fullsizePreview": "gallery/g15/fullsize_preview.mp4",
+    "preview": "gallery/g15/preview.webm",
+    "fullsizePreview": "gallery/g15/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g15/preview.mp4",
+      "src": "gallery/g15/preview.webm",
       "kind": "video",
       "width": 400,
       "height": 224,
@@ -433,7 +433,7 @@ window.galleryItems = [
       "thumb": "gallery/g15/opt/preview-thumb.webp"
     },
     "fullsizeAsset": {
-      "src": "gallery/g15/fullsize_preview.mp4",
+      "src": "gallery/g15/fullsize_preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -499,14 +499,14 @@ window.galleryItems = [
     ],
     "shortDescription": "Demo of rimworld-like game made to test AI for Drumir",
     "longDescription": "Demo of rimworld-like game made to test AI for Drumir\n\nClosed source.",
-    "preview": "gallery/g18/preview.mp4",
+    "preview": "gallery/g18/preview.webm",
     "fullsizePreview": "gallery/g18/fullsize_preview.mp4",
     "media": [
       "gallery/g18/1.jpg",
       "gallery/g18/2.mp4"
     ],
     "previewAsset": {
-      "src": "gallery/g18/preview.mp4",
+      "src": "gallery/g18/preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -558,11 +558,11 @@ window.galleryItems = [
     ],
     "shortDescription": "",
     "longDescription": "",
-    "preview": "gallery/g20/preview.mp4",
-    "fullsizePreview": "gallery/g20/fullsize_preview.mp4",
+    "preview": "gallery/g20/preview.webm",
+    "fullsizePreview": "gallery/g20/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g20/preview.mp4",
+      "src": "gallery/g20/preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -574,13 +574,38 @@ window.galleryItems = [
       "thumb": "gallery/g20/opt/preview-thumb.webp"
     },
     "fullsizeAsset": {
-      "src": "gallery/g20/fullsize_preview.mp4",
+      "src": "gallery/g20/fullsize_preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
       "poster": "gallery/g20/opt/fullsize-poster.webp",
       "thumb": "gallery/g20/opt/fullsize-thumb.webp"
     },
+    "mediaAssets": []
+  },
+  {
+    "title": "2D Oolite",
+    "tags": [
+      "demo"
+    ],
+    "shortDescription": "Oolite in Godot with multiplayer support",
+    "longDescription": "Made oolite in godot, with trading and stuff.\nSource code closed.",
+    "preview": "gallery/g21/preview.webm",
+    "fullsizePreview": "",
+    "media": [],
+    "previewAsset": {
+      "src": "gallery/g21/preview.webm",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "wide": "gallery/g21/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g21/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g21/opt/preview-poster.webp",
+      "thumb": "gallery/g21/opt/preview-thumb.webp"
+    },
+    "fullsizeAsset": null,
     "mediaAssets": []
   }
 ];
