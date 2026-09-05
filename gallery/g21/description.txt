@@ -1,4 +1,4 @@
-#demo
+#game
 2D Oolite
 Oolite in Godot with multiplayer support
 
