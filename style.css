@@ -731,7 +731,8 @@ footer span::before{content:"";width:12px;height:11px;background:var(--px-skull)
 }
 .gallery-controls>button:hover{background:#33333a}
 .gallery-controls>button:active{box-shadow:var(--stone-sunken);background:#18181c;color:var(--bone);text-shadow:1px 1px 0 #000;padding:9px 0 4px}
-.gallery-controls.is-single>button{visibility:hidden}
+/* A single-media item has nothing to step through: no strip, no buttons. */
+.gallery-controls.is-single{display:none}
 .gallery-thumbnails{
   display:flex;align-items:center;justify-content:flex-start;
   gap:6px;
