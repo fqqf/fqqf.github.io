@@ -176,23 +176,6 @@ function naturalSize(asset) {
   return width && height ? { width, height } : null;
 }
 
-/**
- * The box that has to hold every entry of one item.  Taken per item rather
- * than per entry so that stepping through the strip never resizes the modal
- * under the cursor.  Null when nothing in the item has known dimensions.
- */
-function itemSize(entries) {
-  let width = 0;
-  let height = 0;
-  entries.forEach((asset) => {
-    const size = naturalSize(asset);
-    if (!size) return;
-    width = Math.max(width, size.width);
-    height = Math.max(height, size.height);
-  });
-  return width && height ? { width, height } : null;
-}
-
 
 /* ============================================================
    VIDEO ELEMENT PLUMBING
@@ -744,13 +727,21 @@ function createViewer() {
     };
     if (room.width <= 0 || room.height <= 0) return;
 
-    // Whichever axis runs out first sets the scale, and 1 caps it: an original
-    // blown up past its own pixels is a blurry original.
-    const scale = Math.min(room.width / size.width, room.height / size.height, 1);
-    const width = Math.max(MIN_DIALOG_WIDTH, Math.round(size.width * scale) + chromeWidth);
-    const height = Math.max(MIN_STAGE_HEIGHT, Math.round(size.height * scale)) + chromeHeight;
-    dialog.style.width = `min(${width}px, 100%)`;
-    dialog.style.height = `min(${height}px, calc(100vh - ${VIEWPORT_MARGIN}px))`;
+    // One scale for both axes - that is what keeps the stage on the picture's
+    // own proportions, so neither axis is left over as a black bar.  Whichever
+    // axis runs out of room first sets the ceiling; 1 caps it below that, since
+    // an original blown up past its own pixels is a blurry original.
+    const roomScale = Math.min(room.width / size.width, room.height / size.height);
+    // ...unless the dialog would come out too cramped to read, in which case
+    // the floors win over sharpness - but still not over the room.
+    const floorScale = Math.max(
+      (MIN_DIALOG_WIDTH - chromeWidth) / size.width,
+      MIN_STAGE_HEIGHT / size.height,
+    );
+    const scale = Math.min(roomScale, Math.max(Math.min(roomScale, 1), floorScale));
+
+    dialog.style.width = `${Math.round(size.width * scale) + chromeWidth}px`;
+    dialog.style.height = `${Math.round(size.height * scale) + chromeHeight}px`;
   }
 
   function showAt(next) {
@@ -777,16 +768,11 @@ function createViewer() {
     }
     visual.className = "gallery-visual";
 
-    // The stage stretches its child to fill; these caps stop that at the
-    // original's own pixels, and auto margins re-centre the shortfall.
-    const size = naturalSize(asset);
-    if (size) {
-      visual.style.maxWidth = `${size.width}px`;
-      visual.style.maxHeight = `${size.height}px`;
-      visual.style.margin = "auto";
-    }
-
     stage.replaceChildren(visual);
+
+    // Per entry, not once per item: entries of one item do not have to share
+    // a shape, and only the entry actually on screen can be fitted exactly.
+    fitDialog(naturalSize(asset));
 
     counter.textContent = `${index + 1} / ${entries.length}`;
     [...strip.children].forEach((child, position) => {
@@ -850,10 +836,6 @@ function createViewer() {
       });
       strip.replaceChildren(fragment);
       controls.classList.toggle("is-single", entries.length === 1);
-
-      // After the description and the strip are in place, so the measurement
-      // sees the chrome this item actually renders.
-      fitDialog(itemSize(entries));
 
       // Free the CPU and the decoders for the full-size original.
       scheduler.suspend("modal", { release: true });
