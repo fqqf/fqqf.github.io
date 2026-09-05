@@ -641,12 +641,16 @@ function createThumbnail(asset, className, label) {
 
    "Full quality" also means never blowing an original up: a 320x230 clip
    stretched across an 1180x860 dialog is a blurry clip in a big black frame.
-   Items that fit inside SMALL_MEDIA_BOX get a dialog cut down to their own
-   pixels instead, and no visual is ever scaled past its native size.
+   The dialog is cut down to the item's own proportions instead - shrunk to
+   its pixels when it is small, scaled down to fit when it is huge - so the
+   stage ends exactly on the picture and no black bars are left around it.
    ============================================================ */
 
-// An item counts as small when both of its dimensions stay under this.
-const SMALL_MEDIA_BOX = 900;
+// The stylesheet's ceiling for the dialog, and the breathing room the modal
+// keeps around it (its padding, doubled).
+const MAX_DIALOG_WIDTH = 1180;
+const MAX_DIALOG_HEIGHT = 860;
+const VIEWPORT_MARGIN = 44;
 // Floors for the shrunken dialog: below these the header, the description and
 // the thumbnail strip stop being readable, which costs more than the black bars.
 const MIN_DIALOG_WIDTH = 520;
@@ -713,19 +717,20 @@ function createViewer() {
   let opener = null;
 
   /**
-   * Size the dialog around a small item.
+   * Size the dialog around the item, so the stage lands on the picture's own
+   * proportions and nothing is left over as black bars.
    *
    * The chrome - header, stage margins, description, strip, padding - is
    * measured off the default layout rather than hardcoded, so it follows the
-   * stylesheet and whether this item ships a long description.  The result is
-   * clamped with min() so a shrunken dialog still cannot outgrow the viewport,
-   * and styles are cleared first, which both restores the stylesheet defaults
-   * for a normal item and makes the measurement read those defaults.
+   * stylesheet and whether this item ships a long description.  Styles are
+   * cleared first, which both restores the stylesheet defaults for an item of
+   * unknown size and makes the measurement read those defaults.  The result is
+   * clamped with min() as well, so it cannot outgrow the viewport.
    */
   function fitDialog(size) {
     dialog.style.width = "";
     dialog.style.height = "";
-    if (!size || size.width >= SMALL_MEDIA_BOX || size.height >= SMALL_MEDIA_BOX) return;
+    if (!size) return;
 
     // offset* rather than getBoundingClientRect(): the closed dialog carries a
     // scale() transform, which the rect would fold into the numbers.
@@ -733,10 +738,19 @@ function createViewer() {
     const chromeHeight = dialog.offsetHeight - stage.offsetHeight;
     if (chromeWidth <= 0 || chromeHeight <= 0) return;  // not laid out yet
 
-    const width = Math.max(MIN_DIALOG_WIDTH, size.width + chromeWidth);
-    const height = Math.max(MIN_STAGE_HEIGHT, size.height) + chromeHeight;
-    dialog.style.width = `min(${Math.round(width)}px, 100%)`;
-    dialog.style.height = `min(${Math.round(height)}px, calc(100vh - 44px))`;
+    const room = {
+      width: Math.min(MAX_DIALOG_WIDTH, window.innerWidth - VIEWPORT_MARGIN) - chromeWidth,
+      height: Math.min(MAX_DIALOG_HEIGHT, window.innerHeight - VIEWPORT_MARGIN) - chromeHeight,
+    };
+    if (room.width <= 0 || room.height <= 0) return;
+
+    // Whichever axis runs out first sets the scale, and 1 caps it: an original
+    // blown up past its own pixels is a blurry original.
+    const scale = Math.min(room.width / size.width, room.height / size.height, 1);
+    const width = Math.max(MIN_DIALOG_WIDTH, Math.round(size.width * scale) + chromeWidth);
+    const height = Math.max(MIN_STAGE_HEIGHT, Math.round(size.height * scale)) + chromeHeight;
+    dialog.style.width = `min(${width}px, 100%)`;
+    dialog.style.height = `min(${height}px, calc(100vh - ${VIEWPORT_MARGIN}px))`;
   }
 
   function showAt(next) {
