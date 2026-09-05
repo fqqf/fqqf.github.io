@@ -531,7 +531,7 @@ window.galleryItems = [
     "shortDescription": "Oolite in Godot with multiplayer support",
     "longDescription": "Made oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
     "preview": "gallery/g21/preview.mp4",
-    "fullsizePreview": "gallery/g21/fullsize_preview.webm",
+    "fullsizePreview": "gallery/g21/fullsize_preview.mp4",
     "media": [],
     "previewAsset": {
       "src": "gallery/g21/preview.mp4",
@@ -546,7 +546,7 @@ window.galleryItems = [
       "thumb": "gallery/g21/opt/preview-thumb.webp"
     },
     "fullsizeAsset": {
-      "src": "gallery/g21/fullsize_preview.webm",
+      "src": "gallery/g21/fullsize_preview.mp4",
       "kind": "video",
       "width": 1920,
       "height": 1080,
