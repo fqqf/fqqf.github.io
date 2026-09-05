@@ -529,7 +529,7 @@ window.galleryItems = [
       "demo"
     ],
     "shortDescription": "Oolite in Godot with multiplayer support",
-    "longDescription": "Made oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
+    "longDescription": "Oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
     "preview": "gallery/g21/preview.mp4",
     "fullsizePreview": "gallery/g21/fullsize_preview.mp4",
     "media": [],
