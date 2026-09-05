@@ -526,13 +526,15 @@ window.galleryItems = [
   {
     "title": "2D Oolite",
     "tags": [
-      "demo"
+      "game"
     ],
     "shortDescription": "Oolite in Godot with multiplayer support",
     "longDescription": "Oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
     "preview": "gallery/g21/preview.mp4",
     "fullsizePreview": "gallery/g21/fullsize_preview.mp4",
-    "media": [],
+    "media": [
+      "gallery/g21/1.png"
+    ],
     "previewAsset": {
       "src": "gallery/g21/preview.mp4",
       "kind": "video",
@@ -553,6 +555,18 @@ window.galleryItems = [
       "poster": "gallery/g21/opt/fullsize-poster.webp",
       "thumb": "gallery/g21/opt/fullsize-thumb.webp"
     },
-    "mediaAssets": []
+    "mediaAssets": [
+      {
+        "src": "gallery/g21/1.png",
+        "kind": "image",
+        "width": 2560,
+        "height": 1600,
+        "wide": "gallery/g21/opt/m1-960.webp",
+        "wideW": 960,
+        "narrow": "gallery/g21/opt/m1-640.webp",
+        "narrowW": 640,
+        "thumb": "gallery/g21/opt/m1-thumb.webp"
+      }
+    ]
   }
 ];
