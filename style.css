@@ -430,6 +430,7 @@ header{
 .works{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:start;
   gap:44px var(--gap);
   padding:8px 6px 4px;
 }
