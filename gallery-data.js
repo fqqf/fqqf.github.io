@@ -54,35 +54,28 @@ window.galleryItems = [
     "mediaAssets": []
   },
   {
-    "title": "",
+    "title": "Nebula",
     "tags": [
-      "demo"
+      "game"
     ],
-    "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
-    "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
-    "preview": "gallery/g7/preview.mp4",
-    "fullsizePreview": "gallery/g7/fullsize_preview.webm",
+    "shortDescription": "Anomaly space-exploration game",
+    "longDescription": "Anomaly space-exploration game\n\nSource code closed.",
+    "preview": "gallery/g22/preview.mp4",
+    "fullsizePreview": "",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g7/preview.mp4",
+      "src": "gallery/g22/preview.mp4",
       "kind": "video",
-      "width": 1632,
-      "height": 948,
-      "wide": "gallery/g7/opt/preview-960.mp4",
+      "width": 1920,
+      "height": 1080,
+      "wide": "gallery/g22/opt/preview-960.mp4",
       "wideW": 960,
-      "narrow": "gallery/g7/opt/preview-640.mp4",
+      "narrow": "gallery/g22/opt/preview-640.mp4",
       "narrowW": 640,
-      "poster": "gallery/g7/opt/preview-poster.webp",
-      "thumb": "gallery/g7/opt/preview-thumb.webp"
+      "poster": "gallery/g22/opt/preview-poster.webp",
+      "thumb": "gallery/g22/opt/preview-thumb.webp"
     },
-    "fullsizeAsset": {
-      "src": "gallery/g7/fullsize_preview.webm",
-      "kind": "video",
-      "width": 1632,
-      "height": 948,
-      "poster": "gallery/g7/opt/fullsize-poster.webp",
-      "thumb": "gallery/g7/opt/fullsize-thumb.webp"
-    },
+    "fullsizeAsset": null,
     "mediaAssets": []
   },
   {
@@ -192,6 +185,38 @@ window.galleryItems = [
   {
     "title": "",
     "tags": [
+      "demo"
+    ],
+    "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
+    "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
+    "preview": "gallery/g7/preview.mp4",
+    "fullsizePreview": "gallery/g7/fullsize_preview.webm",
+    "media": [],
+    "previewAsset": {
+      "src": "gallery/g7/preview.mp4",
+      "kind": "video",
+      "width": 1632,
+      "height": 948,
+      "wide": "gallery/g7/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g7/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g7/opt/preview-poster.webp",
+      "thumb": "gallery/g7/opt/preview-thumb.webp"
+    },
+    "fullsizeAsset": {
+      "src": "gallery/g7/fullsize_preview.webm",
+      "kind": "video",
+      "width": 1632,
+      "height": 948,
+      "poster": "gallery/g7/opt/fullsize-poster.webp",
+      "thumb": "gallery/g7/opt/fullsize-thumb.webp"
+    },
+    "mediaAssets": []
+  },
+  {
+    "title": "",
+    "tags": [
       "game"
     ],
     "shortDescription": "Short platformer in white-black tones",
@@ -290,6 +315,38 @@ window.galleryItems = [
         "thumb": "gallery/g13/opt/m3-thumb.webp"
       }
     ]
+  },
+  {
+    "title": "2D Oolite",
+    "tags": [
+      "game"
+    ],
+    "shortDescription": "Oolite in Godot with multiplayer support",
+    "longDescription": "Oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
+    "preview": "gallery/g21/preview.mp4",
+    "fullsizePreview": "gallery/g21/fullsize_preview.mp4",
+    "media": [],
+    "previewAsset": {
+      "src": "gallery/g21/preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "wide": "gallery/g21/opt/preview-960.mp4",
+      "wideW": 960,
+      "narrow": "gallery/g21/opt/preview-640.mp4",
+      "narrowW": 640,
+      "poster": "gallery/g21/opt/preview-poster.webp",
+      "thumb": "gallery/g21/opt/preview-thumb.webp"
+    },
+    "fullsizeAsset": {
+      "src": "gallery/g21/fullsize_preview.mp4",
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "poster": "gallery/g21/opt/fullsize-poster.webp",
+      "thumb": "gallery/g21/opt/fullsize-thumb.webp"
+    },
+    "mediaAssets": []
   },
   {
     "title": "Drumir",
@@ -520,38 +577,6 @@ window.galleryItems = [
       "height": 1080,
       "poster": "gallery/g20/opt/fullsize-poster.webp",
       "thumb": "gallery/g20/opt/fullsize-thumb.webp"
-    },
-    "mediaAssets": []
-  },
-  {
-    "title": "2D Oolite",
-    "tags": [
-      "game"
-    ],
-    "shortDescription": "Oolite in Godot with multiplayer support",
-    "longDescription": "Oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
-    "preview": "gallery/g21/preview.mp4",
-    "fullsizePreview": "gallery/g21/fullsize_preview.mp4",
-    "media": [],
-    "previewAsset": {
-      "src": "gallery/g21/preview.mp4",
-      "kind": "video",
-      "width": 1920,
-      "height": 1080,
-      "wide": "gallery/g21/opt/preview-960.mp4",
-      "wideW": 960,
-      "narrow": "gallery/g21/opt/preview-640.mp4",
-      "narrowW": 640,
-      "poster": "gallery/g21/opt/preview-poster.webp",
-      "thumb": "gallery/g21/opt/preview-thumb.webp"
-    },
-    "fullsizeAsset": {
-      "src": "gallery/g21/fullsize_preview.mp4",
-      "kind": "video",
-      "width": 1920,
-      "height": 1080,
-      "poster": "gallery/g21/opt/fullsize-poster.webp",
-      "thumb": "gallery/g21/opt/fullsize-thumb.webp"
     },
     "mediaAssets": []
   }
