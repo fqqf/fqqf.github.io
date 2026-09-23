@@ -873,6 +873,13 @@ function createWork(item) {
   card.setAttribute("role", "button");
   card.setAttribute("aria-label", item.title ? `Open ${item.title}` : "Open archive item");
 
+  // The title bar's close button: decorative, but a real element so it can
+  // light up and press on its own, like the ones on the main window.
+  const close = document.createElement("i");
+  close.className = "work-close";
+  close.setAttribute("aria-hidden", "true");
+  card.appendChild(close);
+
   const media = createMedia(item);
   card.appendChild(media);
 

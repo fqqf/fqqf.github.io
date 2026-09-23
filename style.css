@@ -11,6 +11,14 @@
    URIs (the --px-* variables) and is scaled with crispEdges.
    ============================================================ */
 
+/* DotGothic16 with its capital T lifted one dot to the cap line, trimmed
+   to Latin and Cyrillic.  Built by patch-font.py; licence in fonts/. */
+@font-face{
+  font-family:"DotGothic16 Archive";
+  src:url(fonts/DotGothic16Archive.woff2) format("woff2");
+  font-display:swap;
+}
+
 :root{
   --bg:#000;
   --face:#17130f;      /* button / window face */
@@ -32,7 +40,7 @@
   --gap-v:48px;
   --raised:inset 1px 1px 0 var(--hi),inset -1px -1px 0 var(--lo),inset 2px 2px 0 var(--hi2),inset -2px -2px 0 var(--lo2);
   --dither:repeating-conic-gradient(#1f1811 0 25%,transparent 0 50%) 0 0/2px 2px;
-  --font-ui:"DotGothic16","MS Gothic","Courier New",monospace;
+  --font-ui:"DotGothic16 Archive","DotGothic16","MS Gothic","Courier New",monospace;
   /* One face and one size for everything; the name over the door is
      the only thing cut from the blackletter. */
   --fs:16px;
@@ -365,25 +373,32 @@ header{
   left:-3px;right:-3px;top:0;
   height:27px;
   border-radius:7px 7px 0 0;
+  /* The bar ends in a 3px band of the frame colour, and the dark rule
+     under it stops at the side borders, so the frame runs straight up
+     into the title bar. */
   background:
+    linear-gradient(var(--xp-edge),var(--xp-edge)) 3px 100%/calc(100% - 6px) 1px no-repeat,
     linear-gradient(rgba(255,255,255,.16),transparent 40%),
-    linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 var(--xp-edge);
+    linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) calc(100% - 3px),var(--xp-mid) calc(100% - 3px));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
   image-rendering:pixelated;
 }
 .work:hover::before,.work:focus-within::before{
   background:
+    linear-gradient(var(--xp-edge),var(--xp-edge)) 3px 100%/calc(100% - 6px) 1px no-repeat,
     linear-gradient(rgba(255,255,255,.2),transparent 40%),
-    linear-gradient(#4a6198 0,#27396a 45%,#14203d 100%);
+    linear-gradient(#4a6198 0,#27396a 45%,#14203d calc(100% - 3px),#27396a calc(100% - 3px));
 }
-.work::after{
-  content:"";
+.work-close{
   position:absolute;
   right:4px;top:4px;
   width:18px;height:18px;
   background:var(--xp-close) 0 0/18px 18px no-repeat;
   image-rendering:pixelated;
 }
+/* Same response as the main window's buttons. */
+.work-close:hover{filter:brightness(1.2)}
+.work-close:active{transform:translateY(1px)}
 .media{
   position:relative;
   width:100%;
