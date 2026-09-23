@@ -856,6 +856,12 @@ function toggle(tag) {
   update();
 }
 
+// A card's hashtag always lands on its tag; it never clears the filter.
+function select(tag) {
+  selected = tag;
+  update();
+}
+
 function createWork(item) {
   const tags = Array.isArray(item.tags) ? item.tags : [];
 
@@ -881,33 +887,33 @@ function createWork(item) {
   const caption = document.createElement("figcaption");
   caption.className = "caption";
 
-  const head = document.createElement("div");
-
-  if (tags.length) {
-    const tagList = document.createElement("div");
-    tagList.className = "tags";
-    tags.forEach((tag) => {
-      const button = document.createElement("button");
-      button.className = "tag";
-      button.type = "button";
-      button.dataset.tag = tag;
-      button.textContent = tag;
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        toggle(tag);
-      });
-      tagList.appendChild(button);
-    });
-    head.appendChild(tagList);
-  }
-
-  if (head.children.length) caption.appendChild(head);
-
-  if (item.shortDescription) {
+  // Tags ride at the end of the description as plain hashtags - no
+  // buttons on the card; the filter bar above the grid does the filtering.
+  const hashtags = tags.map((tag) => `#${tag.toLowerCase()}`).join(" ");
+  if (item.shortDescription || hashtags) {
     const description = document.createElement("div");
     description.className = "description";
-    description.textContent = item.shortDescription;
+    if (item.shortDescription) description.append(item.shortDescription);
+    if (hashtags) {
+      // Each hashtag filters by its tag, like the filter bar, without
+      // opening the card.
+      const tagText = document.createElement("span");
+      tagText.className = "hashtags";
+      tags.forEach((tag, position) => {
+        if (position || item.shortDescription) tagText.append(" ");
+        const link = document.createElement("button");
+        link.type = "button";
+        link.className = "hashtag";
+        link.textContent = `#${tag.toLowerCase()}`;
+        link.addEventListener("click", (event) => {
+          event.stopPropagation();
+          playNavigationSound();
+          select(tag);
+        });
+        tagText.append(link);
+      });
+      description.append(tagText);
+    }
     caption.appendChild(description);
   }
 
@@ -956,6 +962,18 @@ function createWork(item) {
 
 const galleryItems = Array.isArray(window.galleryItems) ? window.galleryItems : [];
 
+// The XP "navigation start" click on every filter and card hashtag.  One element, rewound
+// each time, so quick clicks each get their tick.  A browser that cannot
+// play Ogg (Safari) just stays silent.
+const navigationSound = new Audio("windows-navigation-start.ogg");
+navigationSound.preload = "auto";
+
+function playNavigationSound() {
+  navigationSound.currentTime = 0;
+  const attempt = navigationSound.play();
+  if (attempt && attempt.catch) attempt.catch(() => {});
+}
+
 const workElements = galleryItems.map(createWork);
 worksContainer.replaceChildren(...workElements);
 
@@ -984,15 +1002,15 @@ function update() {
     button.classList.toggle("active", filter === "all" ? selected === null : filter === selected);
   });
 
-  document.querySelectorAll(".tag").forEach((button) => {
-    button.classList.toggle("active", button.dataset.tag === selected);
-  });
 
   scheduler.refresh();
 }
 
 filters.forEach((button) => {
-  button.addEventListener("click", () => toggle(button.dataset.filter));
+  button.addEventListener("click", () => {
+    playNavigationSound();
+    toggle(button.dataset.filter);
+  });
 });
 
 

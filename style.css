@@ -38,6 +38,12 @@
      skills, filters, works.  Paddings below subtract whatever room a
      block already keeps inside itself. */
   --gap-v:48px;
+  /* CRT scanlines and a vignette, laid only over the pictures: the card
+     previews, the viewer's stage and its thumbnails. */
+  --crt:
+    radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45)),
+    repeating-conic-gradient(rgba(0,0,0,.12) 0 25%,transparent 0 50%) 0 0/2px 2px,
+    repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);
   --raised:inset 1px 1px 0 var(--hi),inset -1px -1px 0 var(--lo),inset 2px 2px 0 var(--hi2),inset -2px -2px 0 var(--lo2);
   --dither:repeating-conic-gradient(#1f1811 0 25%,transparent 0 50%) 0 0/2px 2px;
   --font-ui:"DotGothic16 Archive","DotGothic16","MS Gothic","Courier New",monospace;
@@ -79,20 +85,6 @@ body{
   /* Nothing outside the window but the dark. */
   background:var(--bg);
 }
-/* CRT scanlines plus a vignette, one fixed layer over everything.  It is
-   a plain gradient, so it costs the compositor a single quad. */
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:3000;
-  pointer-events:none;
-  background:
-    radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45)),
-    repeating-conic-gradient(rgba(0,0,0,.12) 0 25%,transparent 0 50%) 0 0/2px 2px,
-    repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);
-}
-
 a{color:inherit;text-decoration:none}
 a,button,[role=button],label,.work,.win-controls i{cursor:var(--cursor-select)}
 /* Native video controls draw in their own shadow tree.  Chromium exposes
@@ -166,48 +158,45 @@ button{font:inherit;border-radius:0}
 
 /* ---- Title bar + menu bar ---- */
 
+/* Name on the left of the title bar, contacts on the right. */
 header{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  grid-template-areas:"identity controls" "contacts contacts";
-  align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
   gap:0;
   padding:0;
   border:0;
   border-radius:8px 8px 0 0;
-  /* A 27px title bar, the same as the cards' and the viewer's. */
-  --bar:27px;
+  --bar:52px;
   background:
     linear-gradient(rgba(255,255,255,.16),transparent 40%) top/100% var(--bar) no-repeat,
     linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%) top/100% var(--bar) no-repeat;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
 }
 .identity{
-  grid-area:identity;
   display:flex;
   align-items:center;
   gap:16px;
   min-height:var(--bar);
-  padding:0 12px;
+  padding:6px 10px;
 }
 
 /* The name: a ransom note.  theme.js wraps each letter in .rl and hands
    it a rotation (--r), a lift (--y), a size (--s) and a twitch delay. */
-/* 18px so the tallest scrap (x1.18) still fits the 27px bar. */
 .name{
-  font:600 18px/1 var(--font-display);
+  font:600 26px/1 var(--font-display);
   letter-spacing:.02em;
   word-spacing:.35em;
   text-shadow:2px 2px 0 #000;
-  padding:0;
+  padding:4px 0;
 }
 .rw{white-space:nowrap}
 .rl{
   --r:0deg;--y:0px;--s:1;--d:0s;
   display:inline-block;
-  padding:2px 4px 0;
+  padding:3px 5px 0;
   margin:0 1px;
-  font-size:calc(18px * var(--s));
+  font-size:calc(26px * var(--s));
   line-height:.9;
   background:var(--bone);
   color:#000;
@@ -225,17 +214,16 @@ header{
   97%,100%{transform:rotate(var(--r)) translateY(var(--y))}
 }
 
+/* Hidden: the contacts took their place.  The markup and xp-*.png stay. */
 .win-controls{
-  grid-area:controls;
+  display:none;
   /* Pinned to the title bar strip: when the name wraps on a phone the
      row grows taller, and centring would drop the buttons below the bar. */
   align-self:start;
-  display:flex;
   align-items:center;
   height:var(--bar);
-  gap:3px;
-  /* 7px from the edge, where the cards and the viewer keep their close. */
-  padding:0 7px 0 12px;
+  gap:4px;
+  padding:0 10px 0 12px;
 }
 .win-controls i{
   position:relative;
@@ -244,20 +232,29 @@ header{
   background:var(--face);
   box-shadow:var(--raised);
 }
-.win-controls i{width:18px;height:18px;background:var(--xp-min) 0 0/18px 18px no-repeat;box-shadow:none;image-rendering:pixelated}
+/* The 16px XP buttons at 2x: 32px, 10px clear of the bar's top, bottom and edge. */
+.win-controls i{width:32px;height:32px;background:var(--xp-min) 0 0/32px 32px no-repeat;box-shadow:none;image-rendering:pixelated}
 .win-controls i:nth-child(2){background-image:var(--xp-max)}
 .win-controls i:nth-child(3){background-image:var(--xp-close)}
 .win-controls i:hover{filter:brightness(1.2)}
 .win-controls i:active{transform:translateY(1px)}
 
 .contacts{
-  grid-area:contacts;
   display:flex;
   flex-wrap:wrap;
   align-items:center;
   gap:2px;
-  padding:3px 4px;
+  min-height:var(--bar);
+  padding:0 0 0 12px;
   font-size:var(--fs);
+}
+/* Name and contacts need about 945px side by side; the window snaps to
+   whole merlons, so with a scrollbar that first fits in a 1120px window.
+   Narrower, the contacts get their own compact row under the bar, as
+   before, so the gap below them stays --gap-v. */
+@media(max-width:1119px){
+  header{flex-direction:column;align-items:stretch}
+  .contacts{min-height:0;padding:3px 4px}
 }
 .contacts a{padding:1px 10px 3px;text-shadow:1px 1px 0 #000;transition:none}
 .contacts a:hover,.contacts a:focus-visible{background:var(--bone);color:#000;text-shadow:none;outline:none}
@@ -340,7 +337,6 @@ header{
 .skills li{position:relative;padding:0 0 0 16px;break-inside:avoid}
 .skills li+li{margin-top:5px}
 .skills li::before{content:"-";position:absolute;left:0;top:0}
-.skills li.lang{color:var(--ash)}
 
 .filters{
   display:flex;
@@ -452,6 +448,7 @@ header{
   content:"";
   position:absolute;inset:0;
   pointer-events:none;
+  background:var(--crt);
   box-shadow:inset 0 0 0 1px #000,inset 2px 2px 0 rgba(0,0,0,.9),inset 0 0 22px rgba(0,0,0,.7);
 }
 
@@ -464,23 +461,28 @@ header{
   line-height:1.45;
   text-shadow:1px 1px 0 #000;
 }
-.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-/* Filter buttons and the tags on each card are the same control. */
-.filter,.tag{
+/* The hashtags after a description, a shade whiter than its text. */
+.hashtags{color:#bab2a4}
+/* Each one a button that looks like the text around it. */
+.hashtag{appearance:none;padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;text-transform:none;letter-spacing:0}
+.hashtag:hover{color:var(--bone);text-decoration:underline;text-underline-offset:3px}
+.filter{
   appearance:none;
-  border:2px solid var(--bone);
-  background:#000;
-  color:var(--bone);
-  padding:2px 8px 4px;
+  /* Styled as an old hyperlink: no box (the hit area stays), underlined,
+     link blue; the selected one takes the visited-link purple. */
+  border:0;
+  background:none;
+  color:#0000ee;
+  text-decoration:underline;
+  text-underline-offset:4px;
+  padding:4px 10px 6px;
   font:var(--fs)/1 var(--font-ui);
   text-transform:uppercase;
   letter-spacing:.08em;
   text-shadow:1px 1px 0 #000;
-  box-shadow:0 0 0 1px #000,3px 3px 0 #000;
   transition:none;
 }
-.filter:hover,.tag:hover{background:#1a1a1e}
-.filter.active,.tag.active{background:var(--bone);color:#000;text-shadow:none}
+.filter.active{color:#551a8b}
 
 .item-mini-gallery{
   display:flex;
@@ -603,7 +605,7 @@ footer span{display:flex;align-items:center}
 .gallery-stage{position:relative;min-width:0;min-height:0;margin:0 0 8px;background:#000;border:8px solid transparent;border-image:var(--px-chain) 8 round;overflow:hidden}
 .gallery-stage>.gallery-visual{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;object-position:center;animation:gallery-reveal .2s steps(3)}
 .gallery-stage>video.gallery-visual{background:#000}
-.gallery-stage::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px #000,inset 2px 2px 0 rgba(0,0,0,.9),inset 0 0 30px rgba(0,0,0,.7)}
+.gallery-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:var(--crt);box-shadow:inset 0 0 0 1px #000,inset 2px 2px 0 rgba(0,0,0,.9),inset 0 0 30px rgba(0,0,0,.7)}
 @keyframes gallery-reveal{from{opacity:0}to{opacity:1}}
 
 .gallery-long-description{
@@ -648,6 +650,7 @@ footer span{display:flex;align-items:center}
 .gallery-thumbnail:hover,.gallery-thumbnail:focus-visible{opacity:.9}
 .gallery-thumbnail.is-active{opacity:1}
 .gallery-thumbnail img,.gallery-thumbnail video{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
+.gallery-thumbnail::after{content:"";position:absolute;inset:0;pointer-events:none;background:var(--crt)}
 body.gallery-modal-open{overflow:hidden}
 
 
@@ -673,7 +676,11 @@ body.gallery-modal-open{overflow:hidden}
   body{padding:30px 10px 24px}
   .page{border-width:12px}
   .page::before{left:-12px;right:-12px;top:-36px}
+  header{--bar:48px}
   .identity{gap:10px}
+  .name{font-size:20px}
+  .rl{font-size:calc(20px * var(--s));padding:2px 4px 0}
+  .win-controls{padding-right:8px}
   .contacts{gap:0}
   :root{--gap-v:32px}
   /* The stacked portrait sits 20px from the top of .about, the text 26px
