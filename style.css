@@ -95,6 +95,19 @@ body::after{
 
 a{color:inherit;text-decoration:none}
 a,button,[role=button],label,.work,.win-controls i{cursor:var(--cursor-select)}
+/* Native video controls draw in their own shadow tree.  Chromium exposes
+   the parts, so they get the site cursors directly; Firefox's controls
+   inherit the cursor from the video element where they do not set one.
+   One rule per part: a pseudo-element a browser does not know would void
+   a whole selector list. */
+video{cursor:var(--cursor)}
+video::-webkit-media-controls-panel{cursor:var(--cursor)}
+video::-webkit-media-controls-timeline{cursor:var(--cursor-select)}
+video::-webkit-media-controls-volume-slider{cursor:var(--cursor-select)}
+video::-webkit-media-controls-play-button{cursor:var(--cursor-select)}
+video::-webkit-media-controls-mute-button{cursor:var(--cursor-select)}
+video::-webkit-media-controls-fullscreen-button{cursor:var(--cursor-select)}
+video::-webkit-media-controls-overflow-button{cursor:var(--cursor-select)}
 button{font:inherit;border-radius:0}
 ::selection{background:var(--bone);color:#000;text-shadow:none}
 :focus-visible{outline:1px dotted var(--bone);outline-offset:2px}
