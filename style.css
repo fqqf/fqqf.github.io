@@ -384,7 +384,6 @@ header{
   height:27px;
   border-radius:7px 7px 0 0;
   background:
-    var(--xp-info) 6px 5px/16px 16px no-repeat,
     linear-gradient(rgba(255,255,255,.16),transparent 40%),
     linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 var(--xp-edge);
@@ -392,7 +391,6 @@ header{
 }
 .work:hover::before,.work:focus-within::before{
   background:
-    var(--xp-info) 6px 5px/16px 16px no-repeat,
     linear-gradient(rgba(255,255,255,.2),transparent 40%),
     linear-gradient(#4a6198 0,#27396a 45%,#14203d 100%);
 }
@@ -569,10 +567,9 @@ footer span{display:flex;align-items:center}
   gap:20px;
   min-height:40px;
   margin:-8px -11px 8px;
-  padding:6px 8px 6px 44px;
+  padding:6px 8px 6px 12px;
   border-radius:7px 7px 0 0;
   background:
-    var(--xp-info) 10px 50%/24px 24px no-repeat,
     linear-gradient(rgba(255,255,255,.16),transparent 40%),
     linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 var(--xp-edge);
