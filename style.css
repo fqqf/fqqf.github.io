@@ -26,6 +26,10 @@
   --line:#2a2a2a;
   --page-width:1500px;
   --gap:22px;
+  /* The one vertical gap between the page's blocks: contacts, portrait,
+     skills, filters, works.  Paddings below subtract whatever room a
+     block already keeps inside itself. */
+  --gap-v:48px;
   --raised:inset 1px 1px 0 var(--hi),inset -1px -1px 0 var(--lo),inset 2px 2px 0 var(--hi2),inset -2px -2px 0 var(--lo2);
   --dither:repeating-conic-gradient(#1f1811 0 25%,transparent 0 50%) 0 0/2px 2px;
   --font-ui:"DotGothic16","MS Gothic","Courier New",monospace;
@@ -108,24 +112,17 @@ button{font:inherit;border-radius:0}
   width:calc(round(down,min(100%,var(--page-width)) - 32px,64px) + 32px);
   margin:auto;
   /* Masonry on the border box, one flat dark face on the padding box: a
-     panel set into a stone wall.  The inner shadow is the lip of the stone. */
+     panel set into a stone wall, the title bar starting right on the stone.
+     The dark face starts 8px down so the title bar's rounded corners show
+     stone behind them, not the panel. */
   border:24px solid transparent;
-  padding:4px;
+  padding:0;
   background:
-    linear-gradient(var(--face-2),var(--face-2)) padding-box,
+    linear-gradient(var(--face-2),var(--face-2)) 0 8px/100% 100% no-repeat padding-box,
     var(--px-stone) 0 0/128px 96px repeat border-box;
   box-shadow:
-    inset 0 0 0 1px #000,
     0 0 0 1px #000,
     0 0 160px 40px rgba(0,0,0,.9);
-}
-.page::after{
-  content:"";
-  position:absolute;
-  inset:-1px;
-  pointer-events:none;
-  box-shadow:inset 2px 2px 0 rgba(0,0,0,.8),inset -2px -2px 0 rgba(0,0,0,.8),inset 3px 3px 0 rgba(255,255,255,.04);
-  z-index:2;
 }
 /* Battlements along the top of the wall.  stone.png and battlement.png
    are drawn from the same 16x12 brick (32x24 here): each merlon is one
@@ -249,23 +246,22 @@ header{
 .intro{
   position:relative;
   display:block;
-  padding:44px 12px 30px;
+  /* The portrait sits 22px inside .about, top and bottom. */
+  padding:calc(var(--gap-v) - 22px) 12px 0;
 }
 .about{
   position:relative;
   max-width:880px;
-  /* Tall enough for the portrait with the same 22px above and below it
-     (2 border + 22 + 88 portrait + 22 + 2); the text is centred beside it. */
+  /* No frame: just the portrait and the text.  Tall enough for the
+     portrait with 22px above and below it (22 + 88 + 22); the text is
+     centred beside it. */
   display:flex;
   flex-direction:column;
   justify-content:center;
   margin:0 auto;
   padding:23px 30px 23px 132px;
-  min-height:136px;
+  min-height:132px;
   color:var(--bone);
-  background:rgba(5,4,3,.95);
-  border:2px solid var(--bone);
-  box-shadow:0 0 0 1px #000,8px 8px 0 #000;
   font-size:var(--fs);
   line-height:1.5;
   text-shadow:2px 2px 0 #000;
@@ -285,24 +281,6 @@ header{
   box-shadow:0 0 0 2px #000,inset 0 0 0 1px #000;
   filter:grayscale(1) contrast(1.2);
 }
-.about .xp-badge{
-  position:absolute;
-  left:-14px;top:-14px;
-  width:32px;height:32px;
-  background:var(--xp-info) 0 0/32px 32px no-repeat;
-  image-rendering:pixelated;
-  filter:drop-shadow(2px 2px 0 #000);
-}
-.about::after{
-  content:"▼";
-  position:absolute;
-  right:14px;bottom:8px;
-  font-size:var(--fs);
-  line-height:1;
-  color:var(--bone);
-  animation:blink 1s steps(2) infinite;
-}
-@keyframes blink{to{visibility:hidden}}
 
 
 /* ============================================================
@@ -313,15 +291,17 @@ header{
    it stays a strip, not a page. */
 .skills{
   min-inline-size:0;
-  margin:0 0 22px;
-  padding:14px 18px 12px;
+  margin:0;
+  padding:0 18px;
   border:0;
   background:var(--face-2);
 }
+/* Two flowing columns held to a centred block under the intro. */
 .skills ul{
   columns:2;
-  column-gap:32px;
-  margin:6px 0 0;
+  column-gap:48px;
+  max-width:1000px;
+  margin:calc(var(--gap-v) - 22px) auto 0;
   padding:0;
   list-style:none;
   color:var(--bone);
@@ -330,15 +310,17 @@ header{
   text-shadow:1px 1px 0 #000;
 }
 .skills li{position:relative;padding:0 0 5px 16px;break-inside:avoid}
+.skills li:last-child{padding-bottom:0}
 .skills li::before{content:"-";position:absolute;left:0;top:0}
 .skills li.lang{color:var(--ash)}
 
 .filters{
   display:flex;
   flex-wrap:wrap;
+  justify-content:center;
   gap:10px;
-  margin:0 0 34px;
-  padding:10px;
+  margin:0;
+  padding:var(--gap-v) 10px var(--gap-v);
   background:var(--face-2);
 }
 
@@ -347,7 +329,7 @@ header{
   grid-template-columns:repeat(3,minmax(0,1fr));
   align-items:start;
   gap:44px var(--gap);
-  padding:8px 6px 4px;
+  padding:0 6px 4px;
 }
 
 /* Each work is a Windows XP window cast in dark steel: the rounded Luna
@@ -501,7 +483,7 @@ footer{
   align-items:center;
   justify-content:space-between;
   gap:16px;
-  margin:64px -4px -4px;
+  margin:64px 0 0;
   padding:12px 16px;
   background:#000;
   border-top:1px solid #000;
@@ -707,14 +689,18 @@ body.gallery-modal-open{overflow:hidden}
   .rl{font-size:calc(20px * var(--s));padding:2px 4px 0}
   .win-controls{height:48px;padding-right:6px}
   .contacts{gap:0}
-  .intro{padding:28px 4px 22px}
+  :root{--gap-v:32px}
+  /* The stacked portrait sits 20px from the top of .about, the text 26px
+     from its bottom. */
+  .intro{padding:calc(var(--gap-v) - 20px) 4px 0}
   .about{display:block;padding:20px 22px 26px}
   .about::before{position:static;display:block;width:64px;height:64px;margin:0 0 14px}
-  .skills{padding:10px 12px}
+  .skills{padding:0 12px}
+  .skills ul{margin-top:calc(var(--gap-v) - 26px)}
   .skills ul{columns:1}
-  .works{grid-template-columns:1fr;gap:38px;padding:6px 2px}
+  .works{grid-template-columns:1fr;gap:38px;padding:0 2px}
   .work{--tilt:0deg!important}
-  footer{margin:44px -4px -4px;flex-direction:column;align-items:flex-start}
+  footer{margin:44px 0 0;flex-direction:column;align-items:flex-start}
   .gallery-modal{padding:8px}
   .gallery-dialog{height:calc(100vh - 16px);padding:6px}
   .gallery-header{margin:-6px -9px 6px}
