@@ -866,12 +866,14 @@ function createWork(item) {
   card.setAttribute("role", "button");
   card.setAttribute("aria-label", item.title ? `Open ${item.title}` : "Open archive item");
 
-  // The title bar's close button: decorative, but a real element so it can
-  // light up and press on its own, like the ones on the main window.
-  const close = document.createElement("i");
-  close.className = "work-close";
-  close.setAttribute("aria-hidden", "true");
-  card.appendChild(close);
+  // The name sits in the window's title bar.  A closed window has no close
+  // button; only the opened one in the viewer gets that.
+  if (item.title) {
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = item.title;
+    card.appendChild(title);
+  }
 
   const media = createMedia(item);
   card.appendChild(media);
@@ -880,12 +882,6 @@ function createWork(item) {
   caption.className = "caption";
 
   const head = document.createElement("div");
-  if (item.title) {
-    const title = document.createElement("div");
-    title.className = "title";
-    title.textContent = item.title;
-    head.appendChild(title);
-  }
 
   if (tags.length) {
     const tagList = document.createElement("div");
