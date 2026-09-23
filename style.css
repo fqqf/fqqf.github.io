@@ -175,9 +175,11 @@ header{
   padding:0;
   border:0;
   border-radius:8px 8px 0 0;
+  /* A 27px title bar, the same as the cards' and the viewer's. */
+  --bar:27px;
   background:
-    linear-gradient(rgba(255,255,255,.16),transparent 40%) top/100% 52px no-repeat,
-    linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%) top/100% 52px no-repeat;
+    linear-gradient(rgba(255,255,255,.16),transparent 40%) top/100% var(--bar) no-repeat,
+    linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%) top/100% var(--bar) no-repeat;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
 }
 .identity{
@@ -185,26 +187,27 @@ header{
   display:flex;
   align-items:center;
   gap:16px;
-  min-height:52px;
-  padding:6px 10px;
+  min-height:var(--bar);
+  padding:0 12px;
 }
 
 /* The name: a ransom note.  theme.js wraps each letter in .rl and hands
    it a rotation (--r), a lift (--y), a size (--s) and a twitch delay. */
+/* 18px so the tallest scrap (x1.18) still fits the 27px bar. */
 .name{
-  font:600 26px/1 var(--font-display);
+  font:600 18px/1 var(--font-display);
   letter-spacing:.02em;
   word-spacing:.35em;
   text-shadow:2px 2px 0 #000;
-  padding:4px 0;
+  padding:0;
 }
 .rw{white-space:nowrap}
 .rl{
   --r:0deg;--y:0px;--s:1;--d:0s;
   display:inline-block;
-  padding:3px 5px 0;
+  padding:2px 4px 0;
   margin:0 1px;
-  font-size:calc(26px * var(--s));
+  font-size:calc(18px * var(--s));
   line-height:.9;
   background:var(--bone);
   color:#000;
@@ -229,9 +232,10 @@ header{
   align-self:start;
   display:flex;
   align-items:center;
-  height:52px;
+  height:var(--bar);
   gap:3px;
-  padding:0 8px 0 12px;
+  /* 7px from the edge, where the cards and the viewer keep their close. */
+  padding:0 7px 0 12px;
 }
 .win-controls i{
   position:relative;
@@ -256,7 +260,6 @@ header{
   font-size:var(--fs);
 }
 .contacts a{padding:1px 10px 3px;text-shadow:1px 1px 0 #000;transition:none}
-.contacts a::first-letter{text-decoration:underline}
 .contacts a:hover,.contacts a:focus-visible{background:var(--bone);color:#000;text-shadow:none;outline:none}
 
 
@@ -317,11 +320,13 @@ header{
   border:0;
   background:var(--face-2);
 }
-/* Two flowing columns held to a centred block under the intro. */
+/* Two flowing columns held to a centred block under the intro.  1200px is
+   the width where the two columns end closest to level, so the gap down to
+   the filters reads the same from either side. */
 .skills ul{
   columns:2;
   column-gap:48px;
-  max-width:1000px;
+  max-width:1200px;
   margin:calc(var(--gap-v) - 22px) auto 0;
   padding:0;
   list-style:none;
@@ -330,8 +335,10 @@ header{
   line-height:1.4;
   text-shadow:1px 1px 0 #000;
 }
-.skills li{position:relative;padding:0 0 5px 16px;break-inside:avoid}
-.skills li:last-child{padding-bottom:0}
+/* Space above items rather than below: a column break drops it, so neither
+   column ends on 5px of nothing. */
+.skills li{position:relative;padding:0 0 0 16px;break-inside:avoid}
+.skills li+li{margin-top:5px}
 .skills li::before{content:"-";position:absolute;left:0;top:0}
 .skills li.lang{color:var(--ash)}
 
@@ -515,27 +522,13 @@ footer{
   gap:16px;
   margin:64px 0 0;
   padding:12px 16px;
+  /* A black strip across the foot of the window, no rule along its top. */
   background:#000;
-  border-top:1px solid #000;
-  box-shadow:inset 0 1px 0 #1a1a1e;
-  color:#4a4a52;
-  font:var(--fs)/1 var(--font-ui);
-}
-footer span{display:flex;align-items:center}
-.to-top{
-  display:inline-block;
-  padding:5px 16px 7px;
-  background:var(--stone-face);
-  border:1px solid #000;
-  box-shadow:var(--stone-raised);
   color:var(--bone);
   font:var(--fs)/1 var(--font-ui);
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  text-shadow:1px 1px 0 #000,2px 2px 0 #000;
+  text-shadow:1px 1px 0 #000;
 }
-.to-top:hover{background:#33333a}
-.to-top:active{box-shadow:var(--stone-sunken);background:var(--bone);color:#000;text-shadow:none}
+footer span{display:flex;align-items:center}
 
 
 /* ============================================================
@@ -680,11 +673,7 @@ body.gallery-modal-open{overflow:hidden}
   body{padding:30px 10px 24px}
   .page{border-width:12px}
   .page::before{left:-12px;right:-12px;top:-36px}
-  header{background-size:100% 48px}
-  .identity{min-height:48px;gap:10px}
-  .name{font-size:20px}
-  .rl{font-size:calc(20px * var(--s));padding:2px 4px 0}
-  .win-controls{height:48px;padding-right:6px}
+  .identity{gap:10px}
   .contacts{gap:0}
   :root{--gap-v:32px}
   /* The stacked portrait sits 20px from the top of .about, the text 26px
