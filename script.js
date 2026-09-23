@@ -962,7 +962,8 @@ function createWork(item) {
 
 const galleryItems = Array.isArray(window.galleryItems) ? window.galleryItems : [];
 
-// The XP "navigation start" click on every filter and card hashtag.  One element, rewound
+// The XP "navigation start" click on every filter, card hashtag and
+// contact link.  One element, rewound
 // each time, so quick clicks each get their tick.  A browser that cannot
 // play Ogg (Safari) just stays silent.
 const navigationSound = new Audio("windows-navigation-start.ogg");
@@ -973,6 +974,11 @@ function playNavigationSound() {
   const attempt = navigationSound.play();
   if (attempt && attempt.catch) attempt.catch(() => {});
 }
+
+// Contacts open in a new tab (or the mail app), so this page stays to play it.
+document.querySelectorAll(".contacts a").forEach((link) => {
+  link.addEventListener("click", playNavigationSound);
+});
 
 const workElements = galleryItems.map(createWork);
 worksContainer.replaceChildren(...workElements);
