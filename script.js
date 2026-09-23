@@ -669,7 +669,6 @@ function createViewer() {
         </div>
 
         <div class="gallery-header-actions">
-          <span class="gallery-counter" aria-live="polite"></span>
           <button class="gallery-close" type="button" data-gallery-close aria-label="Close gallery">&times;</button>
         </div>
       </header>
@@ -679,9 +678,7 @@ function createViewer() {
       <div class="gallery-long-description"></div>
 
       <div class="gallery-controls">
-        <button type="button" data-gallery-previous aria-label="Previous media">Previous</button>
         <div class="gallery-thumbnails" aria-label="Item media"></div>
-        <button type="button" data-gallery-next aria-label="Next media">Next</button>
       </div>
     </section>
   `;
@@ -691,7 +688,6 @@ function createViewer() {
   const stage = modal.querySelector(".gallery-stage");
   const heading = modal.querySelector("h2");
   const longDescription = modal.querySelector(".gallery-long-description");
-  const counter = modal.querySelector(".gallery-counter");
   const controls = modal.querySelector(".gallery-controls");
   const strip = modal.querySelector(".gallery-thumbnails");
 
@@ -774,7 +770,6 @@ function createViewer() {
     // a shape, and only the entry actually on screen can be fitted exactly.
     fitDialog(naturalSize(asset));
 
-    counter.textContent = `${index + 1} / ${entries.length}`;
     [...strip.children].forEach((child, position) => {
       child.classList.toggle("is-active", position === index);
     });
@@ -805,8 +800,6 @@ function createViewer() {
   modal.querySelectorAll("[data-gallery-close]").forEach((element) => {
     element.addEventListener("click", close);
   });
-  modal.querySelector("[data-gallery-previous]").addEventListener("click", () => showAt(index - 1));
-  modal.querySelector("[data-gallery-next]").addEventListener("click", () => showAt(index + 1));
 
   document.addEventListener("keydown", (event) => {
     if (!modal.classList.contains("is-open")) return;

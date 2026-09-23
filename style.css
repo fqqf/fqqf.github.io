@@ -462,9 +462,7 @@ header{
   display:flex;
   gap:5px;
   margin:6px 0 0;
-  padding:5px;
-  background:#141417;
-  box-shadow:var(--stone-sunken);
+  padding:0;
   overflow-x:auto;
   scrollbar-width:thin;
   scrollbar-color:#3a3a3a transparent;
@@ -475,15 +473,14 @@ header{
   width:60px;
   aspect-ratio:3/2;
   flex:0 0 auto;
-  padding:2px;
+  padding:0;
   border:0;
-  background:var(--stone-face);
-  box-shadow:var(--stone-raised);
+  background:none;
   overflow:hidden;
   opacity:.72;
   transition:opacity .18s;
 }
-.item-mini-thumbnail:hover,.item-mini-thumbnail:focus-visible{opacity:1;box-shadow:var(--stone-sunken);outline:none}
+.item-mini-thumbnail:hover,.item-mini-thumbnail:focus-visible{opacity:1}
 .item-mini-thumbnail img,.item-mini-thumbnail video{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
 
 .project-link{display:inline-block;margin-top:5px;color:var(--ash);border-bottom:1px solid transparent}
@@ -557,38 +554,34 @@ footer span{display:flex;align-items:center}
   transition:transform .25s cubic-bezier(.2,.75,.2,1);
 }
 .gallery-modal.is-open .gallery-dialog{transform:none}
-/* The dark strip across the top, badge at the left, close at the right. */
+/* The same title bar as a card's: 27px, the gradient settling on the
+   frame blue, the dark rule stopping at the side borders, and an 18px close
+   button. */
 .gallery-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:20px;
-  min-height:40px;
+  height:27px;
   margin:-8px -11px 8px;
-  padding:6px 8px 6px 12px;
+  /* The bar reaches over the 3px frame, so 7px puts the close button where
+     a card has it: 4px inside the border. */
+  padding:0 7px 0 12px;
   border-radius:7px 7px 0 0;
   background:
+    linear-gradient(var(--xp-edge),var(--xp-edge)) 3px 100%/calc(100% - 6px) 1px no-repeat,
     linear-gradient(rgba(255,255,255,.16),transparent 40%),
-    linear-gradient(var(--xp-hi) 0,var(--xp-mid) 45%,var(--xp-lo) 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 var(--xp-edge);
+    linear-gradient(var(--xp-hi) 0,var(--xp-mid) 60%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
   image-rendering:pixelated;
 }
 .gallery-header h2{margin:0;font:var(--fs)/1.3 var(--font-ui);text-shadow:2px 2px 0 #000}
-.gallery-header-actions{display:flex;align-items:center;gap:10px}
-.gallery-counter{
-  min-width:64px;
-  padding:2px 9px 4px;
-  background:#0c0c0f;
-  box-shadow:var(--stone-sunken);
-  color:var(--bone);
-  font:var(--fs)/1 var(--font-ui);
-  text-align:center;
-}
+.gallery-header-actions{display:flex;align-items:center}
 .gallery-close{
   appearance:none;
-  width:24px;height:24px;
+  width:18px;height:18px;
   padding:0;border:0;
-  background:var(--xp-close) 0 0/24px 24px no-repeat;
+  background:var(--xp-close) 0 0/18px 18px no-repeat;
   image-rendering:pixelated;
   color:transparent;
   font:0/0 a;
@@ -606,10 +599,8 @@ footer span{display:flex;align-items:center}
 .gallery-long-description{
   max-height:132px;
   margin:0 0 8px;
-  padding:10px 14px;
+  padding:0 2px;
   color:var(--bone);
-  background:#0c0c0f;
-  box-shadow:var(--stone-sunken);
   font-size:var(--fs);
   line-height:1.5;
   text-shadow:1px 1px 0 #000;
@@ -620,39 +611,13 @@ footer span{display:flex;align-items:center}
 .gallery-long-description a{color:var(--bone);text-decoration:underline;text-decoration-color:var(--ash);text-underline-offset:3px}
 .gallery-long-description a:hover{text-decoration-color:var(--bone)}
 
-.gallery-controls{
-  display:grid;
-  grid-template-columns:96px minmax(0,1fr) 96px;
-  align-items:center;
-  gap:10px;
-  padding:0;
-  border-top:0;
-  box-shadow:none;
-}
-.gallery-controls>button{
-  appearance:none;
-  border:1px solid #000;
-  padding:6px 0 8px;
-  background:var(--stone-face);
-  box-shadow:var(--stone-raised);
-  color:var(--bone);
-  font:var(--fs)/1 var(--font-ui);
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  text-shadow:1px 1px 0 #000,2px 2px 0 #000;
-  text-align:center;
-  transition:none;
-}
-.gallery-controls>button:hover{background:#33333a}
-.gallery-controls>button:active{box-shadow:var(--stone-sunken);background:#18181c;color:var(--bone);text-shadow:1px 1px 0 #000;padding:7px 0}
-/* A single-media item has nothing to step through: no strip, no buttons. */
+/* Just the strip of thumbnails; the arrow keys still step through them.
+   A single-media item has nothing to step through, so no strip. */
+.gallery-controls{min-width:0}
 .gallery-controls.is-single{display:none}
 .gallery-thumbnails{
   display:flex;align-items:center;justify-content:flex-start;
   gap:6px;
-  padding:4px;
-  background:#141417;
-  box-shadow:var(--stone-sunken);
   overflow-x:auto;
   scrollbar-width:thin;
   scrollbar-color:#3a3a3a transparent;
@@ -663,16 +628,15 @@ footer span{display:flex;align-items:center}
   width:80px;
   aspect-ratio:3/2;
   flex:0 0 auto;
-  padding:2px;
+  padding:0;
   border:0;
-  background:var(--stone-face);
-  box-shadow:var(--stone-raised);
+  background:none;
   overflow:hidden;
   opacity:.55;
   transition:opacity .2s;
 }
-.gallery-thumbnail:hover,.gallery-thumbnail:focus-visible{opacity:.9;outline:none}
-.gallery-thumbnail.is-active{opacity:1;box-shadow:var(--stone-sunken);background:#18181c}
+.gallery-thumbnail:hover,.gallery-thumbnail:focus-visible{opacity:.9}
+.gallery-thumbnail.is-active{opacity:1}
 .gallery-thumbnail img,.gallery-thumbnail video{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
 body.gallery-modal-open{overflow:hidden}
 
@@ -720,8 +684,6 @@ body.gallery-modal-open{overflow:hidden}
   .gallery-modal{padding:8px}
   .gallery-dialog{height:calc(100vh - 16px);padding:6px}
   .gallery-header{margin:-6px -9px 6px}
-  .gallery-controls{grid-template-columns:72px 1fr 72px}
-  .gallery-header-actions{gap:8px}
 }
 
 @media(prefers-reduced-motion:reduce){
