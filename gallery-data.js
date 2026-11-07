@@ -59,7 +59,7 @@ window.galleryItems = [
       "game"
     ],
     "shortDescription": "Anomaly space-exploration game",
-    "longDescription": "Anomaly space-exploration game\n\nTrailer on YouTube: https://www.youtube.com/watch?v=Jmuex7HSbOo\nDiscord: https://discord.com/invite/YSGYT6MAA7\n\nSource code closed.",
+    "longDescription": "Anomaly space-exploration game\n\nTrailer on YouTube: https://www.youtube.com/watch?v=Jmuex7HSbOo\nDiscord: https://discord.com/invite/YSGYT6MAA7",
     "preview": "gallery/g22/preview.mp4",
     "fullsizePreview": "",
     "media": [],
