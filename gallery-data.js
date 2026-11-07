@@ -59,7 +59,7 @@ window.galleryItems = [
       "game"
     ],
     "shortDescription": "Anomaly space-exploration game",
-    "longDescription": "Anomaly space-exploration game\n\nSource code closed.",
+    "longDescription": "Anomaly space-exploration game\n\nTrailer on YouTube: https://www.youtube.com/watch?v=Jmuex7HSbOo\nDiscord: https://discord.com/invite/YSGYT6MAA7\n\nSource code closed.",
     "preview": "gallery/g22/preview.mp4",
     "fullsizePreview": "",
     "media": [],
@@ -189,11 +189,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Night/day sky generator written in OpenGL/LWJGL",
     "longDescription": "Night/day sky generator written in OpenGL/LWJGL\n\nSource: https://github.com/fqqf/stars-gen-cloudy",
-    "preview": "gallery/g7/preview.mp4",
+    "preview": "gallery/g7/preview.webm",
     "fullsizePreview": "gallery/g7/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g7/preview.mp4",
+      "src": "gallery/g7/preview.webm",
       "kind": "video",
       "width": 1632,
       "height": 948,
@@ -253,7 +253,7 @@ window.galleryItems = [
     ],
     "shortDescription": "2D runner with platforming. Defeat and tame monsters, find new locations",
     "longDescription": "2D runner with platforming. Defeat and tame monsters, find new locations\n\nPrevious version of game was lost, all media that exist of it is here. \nIn case i find a way to restore data, i'll publish updated versions.",
-    "preview": "gallery/g13/preview.mp4",
+    "preview": "gallery/g13/preview.webm",
     "fullsizePreview": "gallery/g13/fullsize_preview.mp4",
     "media": [
       "gallery/g13/2.jpg",
@@ -261,7 +261,7 @@ window.galleryItems = [
       "gallery/g13/4.jpg"
     ],
     "previewAsset": {
-      "src": "gallery/g13/preview.mp4",
+      "src": "gallery/g13/preview.webm",
       "kind": "video",
       "width": 1392,
       "height": 592,
@@ -323,11 +323,11 @@ window.galleryItems = [
     ],
     "shortDescription": "Oolite in Godot with multiplayer support",
     "longDescription": "Oolite in godot, with trading, stuff and multiplayer support over netfox.\n\nSource code closed.",
-    "preview": "gallery/g21/preview.mp4",
-    "fullsizePreview": "gallery/g21/fullsize_preview.mp4",
+    "preview": "gallery/g21/preview.webm",
+    "fullsizePreview": "gallery/g21/fullsize_preview.webm",
     "media": [],
     "previewAsset": {
-      "src": "gallery/g21/preview.mp4",
+      "src": "gallery/g21/preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
@@ -339,7 +339,7 @@ window.galleryItems = [
       "thumb": "gallery/g21/opt/preview-thumb.webp"
     },
     "fullsizeAsset": {
-      "src": "gallery/g21/fullsize_preview.mp4",
+      "src": "gallery/g21/fullsize_preview.webm",
       "kind": "video",
       "width": 1920,
       "height": 1080,
